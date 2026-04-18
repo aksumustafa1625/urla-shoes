@@ -1,0 +1,222 @@
+<template>
+    <div class={computedCardClass}>
+        <div class="card-content">
+ 
+            <!-- SEARCH BAR -->
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Search city..."
+                    value={searchValue}
+                    oninput={handleSearchInput}
+                    onkeyup={handleSearchKey}
+                />
+                <button class="search-btn" onclick={handleSearchSubmit}>Go</button>
+            </div>
+ 
+            <!-- NOT FOUND -->
+            <template if:true={showNotFound}>
+                <div class="not-found-msg">⚠️ City not found. Try again.</div>
+            </template>
+ 
+            <!-- LOADING STATE -->
+            <template if:true={isLoading}>
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Connecting to Weather Station</div>
+                </div>
+            </template>
+ 
+            <!-- ERROR STATE -->
+            <template if:true={showError}>
+                <div class="error-state">
+                    <div class="error-icon">⚡</div>
+                    <div class="error-title">Station Offline</div>
+                    <div class="error-msg">City not found or station unreachable.<br/>Check the city name and try again.</div>
+                </div>
+            </template>
+ 
+            <!-- WEATHER DATA -->
+            <template if:true={showData}>
+ 
+                <!-- HEADER -->
+                <div class="card-header">
+                    <div class="location-badge">
+                        <span class="location-dot"></span>
+                        {locationLabel}
+                    </div>
+                    <span class="refresh-time">{currentTime}</span>
+                </div>
+ 
+                <!-- ANIMATED SVG ICON -->
+                <div class="icon-stage">
+                    <!-- SUN -->
+                    <template if:true={isSunny}>
+                        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g class="svg-sun-rays" transform-origin="60 60">
+                                <line x1="60" y1="10" x2="60" y2="22" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="60" y1="98" x2="60" y2="110" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="10" y1="60" x2="22" y2="60" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="98" y1="60" x2="110" y2="60" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="23" y1="23" x2="31" y2="31" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+                                <line x1="89" y1="89" x2="97" y2="97" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+                                <line x1="97" y1="23" x2="89" y2="31" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+                                <line x1="23" y1="97" x2="31" y2="89" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+                            </g>
+                            <circle class="svg-sun-core" cx="60" cy="60" r="26" fill="rgba(255,255,255,0.95)" filter="drop-shadow(0 0 16px rgba(255,255,255,0.8))"/>
+                            <circle cx="60" cy="60" r="20" fill="rgba(255,200,50,0.4)"/>
+                        </svg>
+                    </template>
+ 
+                    <!-- CLOUDS -->
+                    <template if:true={isCloudy}>
+                        <svg width="140" height="110" viewBox="0 0 140 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g class="svg-cloud-shadow" opacity="0.35">
+                                <ellipse cx="72" cy="82" rx="40" ry="14" fill="rgba(0,0,0,0.2)"/>
+                            </g>
+                            <g class="svg-cloud-main">
+                                <circle cx="50" cy="68" r="22" fill="rgba(255,255,255,0.18)"/>
+                                <circle cx="70" cy="58" r="28" fill="rgba(255,255,255,0.22)"/>
+                                <circle cx="95" cy="68" r="20" fill="rgba(255,255,255,0.18)"/>
+                                <rect x="28" y="68" width="88" height="22" rx="11" fill="rgba(255,255,255,0.2)"/>
+                            </g>
+                            <g class="svg-cloud-main">
+                                <circle cx="42" cy="55" r="16" fill="rgba(255,255,255,0.75)"/>
+                                <circle cx="62" cy="45" r="22" fill="rgba(255,255,255,0.85)"/>
+                                <circle cx="88" cy="53" r="18" fill="rgba(255,255,255,0.8)"/>
+                                <rect x="26" y="55" width="80" height="20" rx="10" fill="rgba(255,255,255,0.85)"/>
+                            </g>
+                        </svg>
+                    </template>
+ 
+                    <!-- RAIN -->
+                    <template if:true={isRainy}>
+                        <svg width="140" height="130" viewBox="0 0 140 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g class="svg-cloud-main">
+                                <circle cx="45" cy="52" r="18" fill="rgba(255,255,255,0.75)"/>
+                                <circle cx="65" cy="42" r="23" fill="rgba(255,255,255,0.85)"/>
+                                <circle cx="90" cy="50" r="19" fill="rgba(255,255,255,0.8)"/>
+                                <rect x="27" y="52" width="82" height="20" rx="10" fill="rgba(255,255,255,0.85)"/>
+                            </g>
+                            <line class="rain-drop" x1="42" y1="82" x2="36" y2="108" stroke="rgba(140,180,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="rain-drop" x1="62" y1="82" x2="56" y2="108" stroke="rgba(140,180,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="rain-drop" x1="82" y1="82" x2="76" y2="108" stroke="rgba(140,180,255,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+                            <line class="rain-drop" x1="52" y1="90" x2="46" y2="116" stroke="rgba(140,180,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                            <line class="rain-drop" x1="72" y1="90" x2="66" y2="116" stroke="rgba(140,180,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                            <line class="rain-drop" x1="92" y1="88" x2="86" y2="114" stroke="rgba(140,180,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </template>
+ 
+                    <!-- SNOW -->
+                    <template if:true={isSnowy}>
+                        <svg width="140" height="130" viewBox="0 0 140 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g class="svg-cloud-main">
+                                <circle cx="45" cy="50" r="18" fill="rgba(255,255,255,0.75)"/>
+                                <circle cx="65" cy="40" r="23" fill="rgba(255,255,255,0.85)"/>
+                                <circle cx="90" cy="48" r="19" fill="rgba(255,255,255,0.8)"/>
+                                <rect x="27" y="50" width="82" height="20" rx="10" fill="rgba(255,255,255,0.85)"/>
+                            </g>
+                            <circle class="snow-flake" cx="42" cy="80" r="4" fill="rgba(220,240,255,0.95)"/>
+                            <circle class="snow-flake" cx="68" cy="82" r="5" fill="rgba(220,240,255,0.95)"/>
+                            <circle class="snow-flake" cx="92" cy="78" r="3.5" fill="rgba(220,240,255,0.95)"/>
+                            <circle class="snow-flake" cx="55" cy="95" r="4.5" fill="rgba(220,240,255,0.9)"/>
+                            <circle class="snow-flake" cx="80" cy="96" r="3" fill="rgba(220,240,255,0.9)"/>
+                        </svg>
+                    </template>
+ 
+                    <!-- STORM -->
+                    <template if:true={isStormy}>
+                        <svg width="140" height="130" viewBox="0 0 140 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g class="svg-cloud-main">
+                                <circle cx="45" cy="48" r="18" fill="rgba(200,200,220,0.6)"/>
+                                <circle cx="65" cy="38" r="23" fill="rgba(200,200,220,0.7)"/>
+                                <circle cx="90" cy="46" r="19" fill="rgba(200,200,220,0.65)"/>
+                                <rect x="27" y="48" width="82" height="20" rx="10" fill="rgba(200,200,220,0.7)"/>
+                            </g>
+                            <g class="svg-lightning">
+                                <polygon points="72,72 62,95 69,95 60,120 80,90 73,90 82,72" fill="#fff700" filter="drop-shadow(0 0 6px #fff700)"/>
+                            </g>
+                            <line class="rain-drop" x1="40" y1="78" x2="34" y2="104" stroke="rgba(140,180,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                            <line class="rain-drop" x1="95" y1="78" x2="89" y2="104" stroke="rgba(140,180,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </template>
+ 
+                    <!-- DEFAULT -->
+                    <template if:true={isDefault}>
+                        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="32" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="22" fill="rgba(255,255,255,0.2)"/>
+                            <path d="M50 28 Q62 40 50 50 Q38 40 50 28Z" fill="rgba(255,255,255,0.6)"/>
+                        </svg>
+                    </template>
+                </div>
+ 
+                <!-- MAIN TEMP INFO -->
+                <div class="main-info">
+                    <div class="temp-row">
+                        <span class="temp-value">{weatherData.temp}</span>
+                        <span class="temp-unit">°C</span>
+                    </div>
+                    <div class="temp-range">↑ {weatherData.tempMax}° &nbsp;↓ {weatherData.tempMin}°</div>
+                    <div class="city-label">{weatherData.city}</div>
+                    <div class="condition-label">{weatherData.description}</div>
+                </div>
+ 
+                <!-- HOURLY FORECAST -->
+                <div class="hourly-section">
+                    <div class="section-label">Hourly Forecast</div>
+                    <div class="hourly-scroll">
+                        <template for:each={hourlyData} for:item="hour">
+                            <div key={hour.time} class={hour.cssClass}>
+                                <span class="hourly-time">{hour.time}</span>
+                                <span class="hourly-icon">{hour.icon}</span>
+                                <span class="hourly-temp">{hour.temp}°</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+ 
+                <!-- STATS -->
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-icon">💧</div>
+                        <span class="stat-label">Humidity</span>
+                        <div class="stat-value">{weatherData.humidity}%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">💨</div>
+                        <span class="stat-label">Wind</span>
+                        <div class="stat-value">{weatherData.wind}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">👁️</div>
+                        <span class="stat-label">Feels Like</span>
+                        <div class="stat-value">{weatherData.feelsLike}°</div>
+                    </div>
+                </div>
+ 
+                <!-- 5-DAY FORECAST -->
+                <div class="forecast-section">
+                    <div class="section-label">5-Day Forecast</div>
+                    <template for:each={forecastData} for:item="day">
+                        <div key={day.date} class="forecast-row">
+                            <span class="forecast-day">{day.dayName}</span>
+                            <span class="forecast-icon">{day.icon}</span>
+                            <span class="forecast-desc">{day.desc}</span>
+                            <div class="forecast-temps">
+                                <span class="forecast-high">{day.high}°</span>
+                                <span class="forecast-low">{day.low}°</span>
+                            </div>
+                            <div class="temp-bar-wrap">
+                                <div class="temp-bar-fill" style={day.barStyle}></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+ 
+            </template>
+        </div>
+    </div>
+</template>

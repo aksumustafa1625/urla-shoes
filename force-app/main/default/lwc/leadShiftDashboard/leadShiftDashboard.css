@@ -1,0 +1,201 @@
+/* Summary Section */
+.summary-container {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+}
+
+.summary-card {
+    flex: 1;
+    min-width: 140px;
+    background: #f4f6f9;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #032d60;
+}
+
+.summary-value.warning {
+    color: #fe9339;
+}
+
+.summary-value.danger {
+    color: #ea001e;
+}
+
+.summary-value.completed {
+    color: #2e844a;
+}
+
+/* Shift Cards Grid */
+.shifts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+}
+
+.shift-card {
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.shift-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shift-card.on-shift {
+    background: #eaf5e6;
+    border-left: 4px solid #2e844a;
+}
+
+.shift-card.off-shift {
+    background: #f3f3f3;
+    border-left: 4px solid #b0adab;
+}
+
+/* Shift Header */
+.shift-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.shift-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #032d60;
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-active {
+    background: #2e844a;
+    color: #ffffff;
+}
+
+.badge-off {
+    background: #b0adab;
+    color: #ffffff;
+}
+
+/* Shift Details */
+.shift-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #706e6b;
+}
+
+.detail-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #181818;
+}
+
+.local-time {
+    font-size: 1rem;
+    color: #0070d2;
+    font-weight: 700;
+}
+
+/* Completed Section */
+.completed-section {
+    text-align: center;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(0, 112, 210, 0.08);
+    border-radius: 8px;
+}
+
+.completed-count {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0070d2;
+}
+
+.completed-label {
+    font-size: 0.7rem;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Capacity Bar */
+.capacity-section {
+    margin-top: 0.75rem;
+}
+
+.capacity-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+
+.capacity-track {
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.capacity-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.bar-low {
+    background: #2e844a;
+}
+
+.bar-medium {
+    background: #fe9339;
+}
+
+.bar-high {
+    background: #e87400;
+}
+
+.bar-full {
+    background: #ea001e;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    color: #706e6b;
+}

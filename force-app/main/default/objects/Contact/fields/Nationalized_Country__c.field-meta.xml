@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nationalized_Country__c</fullName>
+    <label>Nationalized Country</label>
+    <type>Text</type>
+    <length>10</length>
+    <required>false</required>
+    <externalId>false</externalId>
+    <trackFeedHistory>false</trackFeedHistory>
+    <description>Country code predicted by the Nationalize.io API based on the Contact first name.</description>
+</CustomField>
