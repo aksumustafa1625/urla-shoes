@@ -1,0 +1,84 @@
+<template>
+    <lightning-card>
+        <div class="card-body">
+ 
+            <!-- HEADER: Medal IMG + Name + Badge -->
+            <div class="tier-header">
+                <div class="medal">
+                    <img src={tierMedalImg} alt={tierLabel} class="medal-img" />
+                </div>
+                <div class="tier-info">
+                    <h2 class="reseller-name">{resellerName}</h2>
+                    <span class="badge-pill" style={badgeStyle}>{tierLabel}</span>
+                    <p class="tier-desc">{tierDescription}</p>
+                </div>
+            </div>
+ 
+            <!-- STATS GRID -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Opportunities</div>
+                    <div class="stat-value">{totalOpportunities}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Current Tier</div>
+                    <div class="stat-value stat-value-sm">{tierLabel}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Next Level</div>
+                    <div class="stat-value stat-value-sm">{nextTierLabel}</div>
+                </div>
+            </div>
+ 
+            <!-- PROGRESS BAR -->
+            <template if:false={isMaxTier}>
+                <div class="progress-section">
+                    <h4 class="progress-title">Progress to {nextTierLabel}</h4>
+                    <div class="progress-track">
+                        <div class="progress-fill" style={progressStyle}></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>{totalOpportunities} / {nextTierThreshold} opportunities</span>
+                        <span>{oppsRemaining} more to go</span>
+                    </div>
+                </div>
+            </template>
+            <template if:true={isMaxTier}>
+                <div class="progress-section">
+                    <h4 class="progress-title">Maximum tier reached</h4>
+                    <div class="progress-track">
+                        <div class="progress-fill" style={progressStyle}></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>Elite Platinum Partner</span>
+                        <span>30+ opportunities</span>
+                    </div>
+                </div>
+            </template>
+ 
+            <!-- TIER ROADMAP -->
+            <div class="tier-roadmap">
+                <div class="roadmap-step">
+                    <div class="roadmap-dot" style={bronzeDotStyle}>{bronzeDotText}</div>
+                    <div class={bronzeLabelClass}>Bronze<br/><span class="roadmap-threshold">0+</span></div>
+                </div>
+                <div class={line1Class}></div>
+                <div class="roadmap-step">
+                    <div class="roadmap-dot" style={silverDotStyle}>{silverDotText}</div>
+                    <div class={silverLabelClass}>Silver<br/><span class="roadmap-threshold">10+</span></div>
+                </div>
+                <div class={line2Class}></div>
+                <div class="roadmap-step">
+                    <div class="roadmap-dot" style={goldDotStyle}>{goldDotText}</div>
+                    <div class={goldLabelClass}>Gold<br/><span class="roadmap-threshold">20+</span></div>
+                </div>
+                <div class={line3Class}></div>
+                <div class="roadmap-step">
+                    <div class="roadmap-dot" style={platinumDotStyle}>{platinumDotText}</div>
+                    <div class={platinumLabelClass}>Platinum<br/><span class="roadmap-threshold">30+</span></div>
+                </div>
+            </div>
+ 
+        </div>
+    </lightning-card>
+</template>

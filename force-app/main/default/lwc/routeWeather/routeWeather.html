@@ -1,0 +1,202 @@
+<template>
+    <div class="rw-wrapper">
+ 
+        <!-- TOP CONTROL BAR -->
+        <div class="rw-topbar">
+            <div class="rw-route-inputs">
+                <div class="rw-city-pill origin">
+                    <span class="rw-dot origin-dot"></span>
+                    <span class="rw-city-label">ESSEN, DE</span>
+                </div>
+                <div class="rw-arrow">→</div>
+                <div class="rw-city-pill destination">
+                    <span class="rw-dot dest-dot"></span>
+                    <input
+                        type="text"
+                        class="rw-dest-input"
+                        placeholder="Enter destination city..."
+                        value={destInput}
+                        oninput={handleDestInput}
+                        onkeyup={handleDestKey}
+                    />
+                </div>
+                <button class="rw-go-btn" onclick={handleGo} disabled={isLoading}>
+                    <template if:false={isLoading}>🗺️ Show Route</template>
+                    <template if:true={isLoading}>Loading...</template>
+                </button>
+            </div>
+            <template if:true={errorMsg}>
+                <div class="rw-error-bar">⚠️ {errorMsg}</div>
+            </template>
+        </div>
+ 
+        <!-- MAIN -->
+        <div class="rw-main">
+ 
+            <!-- MAP IFRAME -->
+            <div class="rw-map-wrap">
+                <template if:true={hasRoute}>
+                    <div class="rw-map-label">
+                        <span class="rw-badge">📍 Essen → {destCity}</span>
+                        <span class="rw-distance">{routeDistance} · {routeDuration}</span>
+                    </div>
+                </template>
+                <template if:false={hasRoute}>
+                    <div class="rw-map-placeholder">
+                        <div class="rw-empty-icon">🗺️</div>
+                        <div class="rw-empty-title">Route &amp; Weather Navigator</div>
+                        <div class="rw-empty-sub">Enter a destination city above to see the driving route from Essen with live weather conditions.</div>
+                    </div>
+                </template>
+                <iframe
+                    src={mapPageUrl}
+                    class={iframeClass}
+                    frameborder="0"
+                    scrolling="no"
+                    title="Route Map"
+                    lwc:dom="manual">
+                </iframe>
+            </div>
+ 
+            <!-- WEATHER STRIP -->
+            <template if:true={showWeather}>
+                <div class="rw-weather-strip">
+                    <div class="rw-strip-label">WEATHER ALONG THE ROUTE · click a card for details</div>
+                    <div class="rw-weather-cards">
+                        <template for:each={waypointWeather} for:item="wp">
+                            <div key={wp.city} class={wp.cardClass} onclick={handleCardClick} data-city={wp.city}>
+                                <div class="rw-wp-top">
+                                    <span class="rw-wp-dot"></span>
+                                    <span class="rw-wp-type">{wp.type}</span>
+                                </div>
+                                <div class="rw-wp-icon">{wp.icon}</div>
+                                <div class="rw-wp-temp">{wp.temp}°C</div>
+                                <div class="rw-wp-city">{wp.city}</div>
+                                <div class="rw-wp-desc">{wp.desc}</div>
+                                <div class="rw-wp-stats">
+                                    <span>💧 {wp.humidity}%</span>
+                                    <span>💨 {wp.wind}</span>
+                                </div>
+                                <div class="rw-wp-hint">tap for details</div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+ 
+            <!-- AGENTFORCE ANALYSIS -->
+            <template if:true={showWeather}>
+                <div class="af-section">
+                    <div class="af-header">
+                        <div class="af-logo">
+                            <span class="af-logo-icon">✦</span>
+                            <span class="af-logo-text">Agentforce</span>
+                        </div>
+                        <span class="af-badge">Route Safety Analysis</span>
+                    </div>
+ 
+                    <template if:true={aiLoading}>
+                        <div class="af-loading">
+                            <div class="af-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span class="af-loading-text">Analyzing route conditions...</span>
+                        </div>
+                    </template>
+ 
+                    <template if:false={aiLoading}>
+                        <div class={afCardClass}>
+                            <span class="af-safety-icon">{afSafetyIcon}</span>
+                            <p class="af-text">{aiAnalysis}</p>
+                        </div>
+                    </template>
+                </div>
+            </template>
+ 
+        </div>
+ 
+        <!-- MODAL OVERLAY -->
+        <template if:true={showModal}>
+            <div class="modal-overlay" onclick={handleOverlayClick}>
+                <div class="modal-card" onclick={handleModalClick}>
+ 
+                    <!-- CLOSE -->
+                    <button class="modal-close" onclick={closeModal}>✕</button>
+ 
+                    <!-- BACKGROUND GLOW -->
+                    <div class={modalBgClass}></div>
+ 
+                    <!-- HEADER -->
+                    <div class="modal-header">
+                        <div class="modal-location-badge">
+                            <span class="modal-dot"></span>
+                            {modal.type}
+                        </div>
+                        <span class="modal-time">{currentTime}</span>
+                    </div>
+ 
+                    <!-- ICON + TEMP -->
+                    <div class="modal-icon-stage">{modal.icon}</div>
+ 
+                    <div class="modal-temp-row">
+                        <span class="modal-temp">{modal.temp}</span>
+                        <span class="modal-unit">°C</span>
+                    </div>
+                    <div class="modal-range">↑ {modal.tempMax}°  ↓ {modal.tempMin}°</div>
+                    <div class="modal-city">{modal.city}</div>
+                    <div class="modal-desc">{modal.desc}</div>
+ 
+                    <!-- STATS GRID -->
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <span class="modal-stat-icon">💧</span>
+                            <span class="modal-stat-label">Humidity</span>
+                            <span class="modal-stat-val">{modal.humidity}%</span>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-icon">💨</span>
+                            <span class="modal-stat-label">Wind</span>
+                            <span class="modal-stat-val">{modal.wind}</span>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-icon">🌡️</span>
+                            <span class="modal-stat-label">Feels Like</span>
+                            <span class="modal-stat-val">{modal.feelsLike}°C</span>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-icon">☁️</span>
+                            <span class="modal-stat-label">Clouds</span>
+                            <span class="modal-stat-val">{modal.clouds}%</span>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-icon">👁️</span>
+                            <span class="modal-stat-label">Visibility</span>
+                            <span class="modal-stat-val">{modal.visibility}</span>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-icon">📊</span>
+                            <span class="modal-stat-label">Pressure</span>
+                            <span class="modal-stat-val">{modal.pressure} hPa</span>
+                        </div>
+                    </div>
+ 
+                    <!-- HOURLY MINI STRIP -->
+                    <div class="modal-hourly-section">
+                        <div class="modal-section-label">HOURLY FORECAST</div>
+                        <div class="modal-hourly-scroll">
+                            <template for:each={modal.hourly} for:item="h">
+                                <div key={h.time} class={h.cls}>
+                                    <span class="modal-h-time">{h.time}</span>
+                                    <span class="modal-h-icon">{h.icon}</span>
+                                    <span class="modal-h-temp">{h.temp}°</span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+        </template>
+ 
+    </div>
+</template>

@@ -1,0 +1,86 @@
+<template>
+    <lightning-card title="Lead Shift Dashboard" icon-name="standard:shift">
+        <lightning-button-icon
+            icon-name="utility:refresh"
+            alternative-text="Refresh"
+            slot="actions"
+            onclick={handleRefresh}
+        ></lightning-button-icon>
+
+        <!-- Summary Cards -->
+        <div class="summary-container">
+            <div class="summary-card">
+                <div class="summary-label">Active Shifts</div>
+                <div class="summary-value">{summary.activeShiftCount} / {summary.totalShiftCount}</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Waiting Leads</div>
+                <div class={waitingClass}>{summary.totalWaiting}</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Assigned Leads</div>
+                <div class="summary-value">{summary.totalAssigned}</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Completed Total Leads</div>
+                <div class="summary-value completed">{summary.totalCompleted}</div>
+            </div>
+        </div>
+
+        <!-- Shift Cards -->
+        <template if:true={hasShifts}>
+            <div class="shifts-grid">
+                <template for:each={shifts} for:item="shift">
+                    <div key={shift.shiftId} class={shift.statusClass}>
+                        <div class="shift-header">
+                            <div class="shift-name">{shift.assigneeName}</div>
+                            <span class={shift.statusBadgeClass}>{shift.statusLabel}</span>
+                        </div>
+
+                        <div class="shift-detail">
+                            <span class="detail-label">Shift</span>
+                            <span class="detail-value">{shift.shiftName}</span>
+                        </div>
+
+                        <div class="shift-detail">
+                            <span class="detail-label">Local Time</span>
+                            <span class="detail-value local-time">{shift.localTime}</span>
+                        </div>
+
+                        <div class="shift-detail">
+                            <span class="detail-label">Working Hours</span>
+                            <span class="detail-value">{shift.workingHours}</span>
+                        </div>
+
+                        <div class="shift-detail">
+                            <span class="detail-label">Timezone</span>
+                            <span class="detail-value">{shift.timezone}</span>
+                        </div>
+
+                        <div class="completed-section">
+                            <div class="completed-count">{shift.completedCount}</div>
+                            <div class="completed-label">Completed Leads</div>
+                        </div>
+
+                        <div class="capacity-section">
+                            <div class="capacity-header">
+                                <span class="detail-label">Lead Load</span>
+                                <span class="detail-value">{shift.currentLeadCount} / {shift.maxCapacity}</span>
+                            </div>
+                            <div class="capacity-track">
+                                <div class={shift.capacityBarClass} style={shift.capacityBarStyle}></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <template if:false={hasShifts}>
+            <div class="empty-state">
+                <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                <p>No active shifts found.</p>
+            </div>
+        </template>
+    </lightning-card>
+</template>
