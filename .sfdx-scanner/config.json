@@ -1,0 +1,8 @@
+﻿{
+    "engines":  {
+                    "flow":  {
+                                 "disable_engine":  false,
+                                 "python_command":  "C:\\Users\\DELL\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe"
+                             }
+                }
+}
