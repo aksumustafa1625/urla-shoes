@@ -22,14 +22,21 @@ public class NationalizeService implements Queueable, Database.AllowsCallouts {
             WHERE Id IN :contactIds AND FirstName != null
         ];
 
+        // Build country code -> country name map from Salesforce's MailingCountryCode picklist
+        Map<String, String> countryMap = getCountryCodeMap();
+
         List<Contact> toUpdate = new List<Contact>();
 
         for (Contact c : contacts) {
             String countryCode = getCountryForName(c.FirstName);
             if (countryCode != null) {
+                String countryName = countryMap.get(countryCode);
+                String displayValue = countryName != null
+                    ? countryCode + ', ' + countryName
+                    : countryCode;
                 toUpdate.add(new Contact(
                     Id = c.Id,
-                    Nationalized_Country__c = countryCode
+                    Nationalized_Country__c = displayValue
                 ));
             }
         }
@@ -37,6 +44,16 @@ public class NationalizeService implements Queueable, Database.AllowsCallouts {
         if (!toUpdate.isEmpty()) {
             update toUpdate;
         }
+    }
+
+    @TestVisible
+    private static Map<String, String> getCountryCodeMap() {
+        Map<String, String> codeToName = new Map<String, String>();
+        List<Schema.PicklistEntry> entries = Contact.MailingCountryCode.getDescribe().getPicklistValues();
+        for (Schema.PicklistEntry entry : entries) {
+            codeToName.put(entry.getValue(), entry.getLabel());
+        }
+        return codeToName;
     }
 
     @TestVisible
