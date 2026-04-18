@@ -1,5 +1,5 @@
 /**
-List<Shift__c> shifts = [SELECT Name, Timezone__c, Start_Hour__c, End_Hour__c FROM Shift__c WHERE Is_Active__c = true];
+List<Shift__c> shifts = [SELECT Name, Assigned_User__r.Name, Timezone__c, Start_Hour__c, End_Hour__c FROM Shift__c WHERE Is_Active__c = true];
 
 Map<String, Integer> utcOffset = new Map<String, Integer>();
 utcOffset.put('Africa/Lagos', 1);
@@ -7,15 +7,30 @@ utcOffset.put('America/New_York', -5);
 utcOffset.put('Pacific/Auckland', 12);
 utcOffset.put('Asia/Tokyo', 9);
 
+List<String> activeNow = new List<String>();
+
 for (Shift__c s : shifts) {
     Integer offset = utcOffset.get(s.Timezone__c);
     Integer localStart = Math.mod((Integer)s.Start_Hour__c + offset, 24);
     Integer localEnd = Math.mod((Integer)s.End_Hour__c + offset, 24);
-    System.debug(s.Name + ' | UTC: ' + (Integer)s.Start_Hour__c + ':00 - ' + (Integer)s.End_Hour__c + ':00 | Yerel: ' + localStart + ':00 - ' + localEnd + ':00 | Lagos: ' + Math.mod((Integer)s.Start_Hour__c + 1, 24) + ':00 - ' + Math.mod((Integer)s.End_Hour__c + 1, 24) + ':00');
+    Integer localNow = Integer.valueOf(DateTime.now().format('H', s.Timezone__c));
+    Integer startH = (Integer)s.Start_Hour__c;
+    Integer endH = (Integer)s.End_Hour__c;
+
+    Boolean isActive = startH < endH
+        ? (localNow >= startH && localNow < endH)
+        : (localNow >= startH || localNow < endH);
+
+    String status = isActive ? 'AKTIF' : 'OFF';
+    if (isActive) activeNow.add(s.Assigned_User__r.Name);
+
+    System.debug(s.Name + ' [' + status + '] | ' + s.Assigned_User__r.Name + ' | UTC: ' + (Integer)s.Start_Hour__c + ':00 - ' + (Integer)s.End_Hour__c + ':00 | Yerel: ' + localStart + ':00 - ' + localEnd + ':00 | Simdi yerel: ' + localNow + ':00');
 }
 
+System.debug('=== SU AN AKTIF OLANLAR ===');
+System.debug(String.join(activeNow, ', '));
 
-
+    
  */
 delete[SELECT id FROM Lead WHERE CreatedDate = LAST_N_DAYS:3];
 delete [SELECT Id FROM Lead_Queue__c WHERE CreatedDate = LAST_N_DAYS:3];
