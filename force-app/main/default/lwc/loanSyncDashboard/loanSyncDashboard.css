@@ -1,0 +1,8 @@
+.payload-box {
+    font-family: Menlo, Consolas, 'Courier New', monospace;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 300px;
+    overflow: auto;
+}

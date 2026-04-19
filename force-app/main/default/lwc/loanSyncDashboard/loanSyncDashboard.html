@@ -1,0 +1,109 @@
+<template>
+    <lightning-card title="Loan Sync Dashboard" icon-name="standard:sync">
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            alternative-text="Refresh"
+            title="Refresh"
+            onclick={handleRefresh}>
+        </lightning-button-icon>
+
+        <div class="slds-p-horizontal_medium">
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-p-vertical_small">{error}</div>
+            </template>
+
+            <template if:true={loan}>
+                <!-- Status header -->
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_medium">
+                    <div class="slds-media slds-media_center">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name={statusIcon} variant={statusBadgeVariant} size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <span class={statusBadgeVariant} style="font-weight:bold; font-size:1.05rem;">{statusBadgeLabel}</span>
+                            <p class="slds-text-body_small slds-text-color_weak">
+                                Last attempt: {lastAttemptFormatted}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <lightning-button
+                            label="Retry Now"
+                            icon-name="utility:sync"
+                            variant="brand"
+                            disabled={loading}
+                            onclick={handleRetry}>
+                        </lightning-button>
+                    </div>
+                </div>
+
+                <!-- Quick facts grid -->
+                <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <div class="slds-text-title slds-text-color_weak">Core System Ref</div>
+                        <div class="slds-text-body_regular"><b>{coreRef}</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <div class="slds-text-title slds-text-color_weak">Retry Count</div>
+                        <div class="slds-text-body_regular"><b>{retryCount}</b> / {maxRetries}</div>
+                    </div>
+                    <template if:true={syncError}>
+                        <div class="slds-col slds-size_1-of-1 slds-p-around_x-small">
+                            <div class="slds-text-title slds-text-color_weak">Last Error</div>
+                            <div class="slds-text-color_error">{syncError}</div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- JSON payload preview -->
+                <div class="slds-m-bottom_medium">
+                    <lightning-button
+                        label={togglePayloadLabel}
+                        icon-name={togglePayloadIcon}
+                        variant="neutral"
+                        onclick={togglePayload}>
+                    </lightning-button>
+                    <template if:true={showPayload}>
+                        <pre class="payload-box slds-box slds-theme_shade slds-m-top_small">{payloadPreview}</pre>
+                    </template>
+                </div>
+
+                <!-- Sync history -->
+                <template if:true={hasLogs}>
+                    <div class="slds-text-title_bold slds-m-bottom_x-small">Sync History</div>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th>#</th>
+                                <th>Attempt</th>
+                                <th>Status</th>
+                                <th>When</th>
+                                <th>Error</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={logs} for:item="log">
+                                <tr key={log.Id}>
+                                    <td>{log.Name}</td>
+                                    <td>{log.Attempt_Number__c}</td>
+                                    <td>
+                                        <lightning-badge label={log.badgeLabel} variant={log.badgeVariant}></lightning-badge>
+                                    </td>
+                                    <td>
+                                        <lightning-formatted-date-time
+                                            value={log.CreatedDate}
+                                            year="numeric" month="short" day="2-digit"
+                                            hour="2-digit" minute="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </td>
+                                    <td class="slds-truncate">{log.Error_Message__c}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
