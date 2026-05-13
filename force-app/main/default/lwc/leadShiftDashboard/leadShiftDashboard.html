@@ -1,11 +1,16 @@
 <template>
     <lightning-card title="Lead Shift Dashboard" icon-name="standard:shift">
-        <lightning-button-icon
-            icon-name="utility:refresh"
-            alternative-text="Refresh"
-            slot="actions"
-            onclick={handleRefresh}
-        ></lightning-button-icon>
+        <div slot="actions" class="action-group">
+            <span class={liveIndicatorClass}>
+                <span class="live-dot"></span>
+                {liveLabel}
+            </span>
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh"
+                onclick={handleRefresh}
+            ></lightning-button-icon>
+        </div>
 
         <!-- Summary Cards -->
         <div class="summary-container">
@@ -27,11 +32,114 @@
             </div>
         </div>
 
-        <!-- Shift Cards -->
+        <!-- Top Row: Timeline (left) + Activity Feed (right) -->
+        <div class="top-grid">
+
+            <!-- 24-Hour Coverage Timeline -->
+            <template if:true={hasShifts}>
+                <div class="timeline-section">
+                    <div class="timeline-header">
+                        <span class="timeline-title">24-Hour Coverage (Lagos Time)</span>
+                        <span class="timeline-now">Now: {summary.lagosCurrentHour}:{summary.lagosCurrentMinute}</span>
+                    </div>
+
+                    <div class="timeline-wrapper">
+                        <!-- Hour ticks -->
+                        <div class="timeline-ticks">
+                            <template for:each={hours} for:item="h">
+                                <div key={h.key} class="tick">
+                                    <template if:true={h.showLabel}>
+                                        <span class="tick-label">{h.label}</span>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Shift bars -->
+                        <div class="timeline-track">
+                            <template for:each={shifts} for:item="shift">
+                                <div key={shift.shiftId} class="timeline-row">
+                                    <div class="timeline-row-label" style={shift.colorStyle}>
+                                        {shift.assigneeName}
+                                    </div>
+                                    <div class="timeline-row-bars">
+                                        <template for:each={shift.timelineBars} for:item="bar">
+                                            <div key={bar.key} class="timeline-bar" style={bar.style}></div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Current time cursor -->
+                            <div class="timeline-cursor" style={cursorStyle}>
+                                <div class="cursor-label">NOW</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Champion Leaderboard -->
+            <div class="leaderboard-panel">
+                <div class="leaderboard-header">
+                    <span class="leaderboard-title">🏆 Champion Board</span>
+                </div>
+                <div class="leaderboard-list">
+                    <template for:each={leaderboard} for:item="leader">
+                        <div key={leader.shiftId} class={leader.rowClass}>
+                            <div class="leader-rank">{leader.rankMedal}</div>
+                            <div class="leader-body">
+                                <div class="leader-name">{leader.assigneeName}</div>
+                                <div class="leader-tier">{leader.rankLabel}</div>
+                                <div class="leader-bar-track">
+                                    <div class="leader-bar" style={leader.barStyle}></div>
+                                </div>
+                            </div>
+                            <div class="leader-count">{leader.completedCount}</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Live Activity Feed -->
+            <div class="activity-panel">
+                <div class="activity-header">
+                    <span class="activity-title">Live Activity Feed</span>
+                    <span class="activity-count">{activities.length}</span>
+                </div>
+                <template if:true={hasActivities}>
+                    <div class="activity-list">
+                        <template for:each={activities} for:item="activity">
+                            <div key={activity.id} class={activity.cardClass}>
+                                <div class={activity.iconClass}>
+                                    <lightning-icon icon-name={activity.iconName} size="xx-small" variant="inverse"></lightning-icon>
+                                </div>
+                                <div class="activity-body">
+                                    <div class="activity-time">{activity.time}</div>
+                                    <div class="activity-message">{activity.message}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template if:false={hasActivities}>
+                    <div class="activity-empty">
+                        <p>Waiting for real-time events…</p>
+                    </div>
+                </template>
+            </div>
+
+        </div>
+
+        <!-- Bottom Row: 4 Shift Cards Side-by-Side -->
         <template if:true={hasShifts}>
-            <div class="shifts-grid">
+            <div class="shifts-row">
                 <template for:each={shifts} for:item="shift">
                     <div key={shift.shiftId} class={shift.statusClass}>
+                        <div class={shift.rankBadgeClass}>
+                            <span class="rank-medal">{shift.rankMedal}</span>
+                            <span class="rank-label">{shift.rankLabel}</span>
+                        </div>
                         <div class="shift-header">
                             <div class="shift-name">{shift.assigneeName}</div>
                             <span class={shift.statusBadgeClass}>{shift.statusLabel}</span>

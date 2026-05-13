@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Monthly_Payments__c</fullName>
+    <description>Loan_Amount divided by Term_In_Months. Calculated at Loan creation time and stored (not a formula) so the value is always bulk-safe and addressable for reporting.</description>
+    <externalId>false</externalId>
+    <label>Monthly Payments</label>
+    <precision>16</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

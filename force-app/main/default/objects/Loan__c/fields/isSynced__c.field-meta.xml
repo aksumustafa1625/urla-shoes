@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>isSynced__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Set to true after the core-system sync callout returns HTTP 200. False means the Loan has not yet been confirmed by the core system.</description>
+    <externalId>false</externalId>
+    <label>Is Synced</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>
