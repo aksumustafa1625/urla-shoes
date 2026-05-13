@@ -18,19 +18,23 @@
 
 import { LightningElement, track } from 'lwc';
 import analyzeRoute from '@salesforce/apex/RouteWeatherAnalysis.analyzeRoute';
+import getOpenWeatherApiKey from '@salesforce/apex/ApiKeyService.getOpenWeatherApiKey';
 
 /**
  * Visualforce Page URL that hosts the Google Maps iframe.
  * Google Maps cannot be loaded directly in LWC due to Lightning Web Security (LWS),
  * so it runs inside a VF page and communicates via window.postMessage.
- * Update this URL when deploying to a different org.
+ * Relative path resolves to whichever org is currently hosting the LWC,
+ * so this works in any environment without per-org edits.
  */
-const VF_PAGE_URL = 'https://orgfarm-a5d5726aef-dev-ed--c.develop.vf.force.com/apex/RouteMapPage';
+const VF_PAGE_URL = '/apex/RouteMapPage';
 
 export default class RouteWeather extends LightningElement {
 
-    // OpenWeather API key
-    WEATHER_KEY  = '46996110e4ec719fd8c925aee4f83704';
+    // OpenWeather API key — loaded async from API_Config__c custom setting
+    // via ApiKeyService.getOpenWeatherApiKey(). See connectedCallback below.
+    // Setup → Custom Settings → API Config → Manage to set the value.
+    WEATHER_KEY = '';
 
     // Essen, Germany — fixed origin coordinates
     ORIGIN_COORD = { lat: 51.4556, lng: 7.0116 };
@@ -75,13 +79,25 @@ export default class RouteWeather extends LightningElement {
 
     // ── Lifecycle ──────────────────────────────────────────────
 
-    connectedCallback() {
+    async connectedCallback() {
         this._updateTime();
         // Update clock every minute
         this._timer = setInterval(() => this._updateTime(), 60000);
         // Listen for postMessage events from the Google Maps VF iframe
         this._msgHandler = this._handleMessage.bind(this);
         window.addEventListener('message', this._msgHandler);
+
+        // Load OpenWeather API key from API_Config__c custom setting.
+        // If the key is missing, weather fetches will fail with a clear error.
+        try {
+            this.WEATHER_KEY = await getOpenWeatherApiKey();
+            if (!this.WEATHER_KEY) {
+                this.errorMsg = 'OpenWeather API key not configured. ' +
+                    'Setup → Custom Settings → API Config → Manage.';
+            }
+        } catch (e) {
+            this.errorMsg = 'Could not load OpenWeather API key: ' + (e.body?.message || e.message || e);
+        }
     }
 
     disconnectedCallback() {
