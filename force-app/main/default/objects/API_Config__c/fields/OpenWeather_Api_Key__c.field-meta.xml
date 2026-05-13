@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OpenWeather_Api_Key__c</fullName>
+    <description>OpenWeather API key, consumed by the routeWeather LWC via ApiKeyService.getOpenWeatherApiKey().</description>
+    <inlineHelpText>Get a key from home.openweathermap.org/api_keys (free tier is sufficient for this demo).</inlineHelpText>
+    <label>OpenWeather API Key</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
