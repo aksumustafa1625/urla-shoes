@@ -43,7 +43,7 @@ public with sharing class FileHubController {
         }
         soql += ' ORDER BY CreatedDate DESC LIMIT 200';
 
-        return toDTOs(Database.query(soql));
+        return toDTOs(Database.query(soql, AccessLevel.USER_MODE));
     }
 
     /**
@@ -69,7 +69,7 @@ public with sharing class FileHubController {
         }
         soql += ' ORDER BY Sent_Date__c DESC NULLS LAST, CreatedDate DESC LIMIT 200';
 
-        return toDTOs(Database.query(soql));
+        return toDTOs(Database.query(soql, AccessLevel.USER_MODE));
     }
 
     /**
@@ -94,7 +94,7 @@ public with sharing class FileHubController {
         }
         soql += ' ORDER BY Sent_Date__c DESC NULLS LAST, CreatedDate DESC LIMIT 200';
 
-        return toDTOs(Database.query(soql));
+        return toDTOs(Database.query(soql, AccessLevel.USER_MODE));
     }
 
     /**
@@ -125,7 +125,7 @@ public with sharing class FileHubController {
             + 'FROM File_Hub_Entry__c '
             + 'WHERE ' + filter
             + ' ORDER BY CreatedDate DESC LIMIT 200';
-        return toDTOs(Database.query(soql));
+        return toDTOs(Database.query(soql, AccessLevel.USER_MODE));
     }
 
     /**
@@ -134,7 +134,7 @@ public with sharing class FileHubController {
     @AuraEnabled(cacheable=true)
     public static Integer getUnreadCount() {
         Id me = UserInfo.getUserId();
-        return [SELECT COUNT() FROM File_Hub_Entry__c WHERE Recipient__c = :me AND Read__c = false];
+        return [SELECT COUNT() FROM File_Hub_Entry__c WHERE Recipient__c = :me AND Read__c = false WITH USER_MODE];
     }
 
     /**
@@ -175,7 +175,7 @@ public with sharing class FileHubController {
             + 'WHERE ' + whereClause + ' GROUP BY Category__c';
 
         Integer total = 0;
-        for (AggregateResult ar : Database.query(soql)) {
+        for (AggregateResult ar : Database.query(soql, AccessLevel.USER_MODE)) {
             String cat = (String) ar.get('Category__c');
             Integer cnt = (Integer) ar.get('cnt');
             if (cat != null && result.containsKey(cat)) {
@@ -224,6 +224,7 @@ public with sharing class FileHubController {
             FROM File_Hub_Entry__c
             WHERE (Sender__c = :me OR Recipient__c = :me)
               AND CreatedDate >= :sinceDT
+            WITH USER_MODE
             GROUP BY DAY_ONLY(CreatedDate)
         ]) {
             countByDate.put((Date) ar.get('day'), (Integer) ar.get('cnt'));
@@ -287,6 +288,7 @@ public with sharing class FileHubController {
             FROM File_Hub_Entry__c
             WHERE (Sender__c = :me OR Recipient__c = :me)
               AND CreatedDate >= :since
+            WITH USER_MODE
             ORDER BY CreatedDate DESC
             LIMIT 10
         ]) {
@@ -347,7 +349,7 @@ public with sharing class FileHubController {
         }
         soql += ' ORDER BY Name LIMIT 10';
 
-        for (User u : Database.query(soql)) {
+        for (User u : Database.query(soql, AccessLevel.USER_MODE)) {
             UserDTO dto = new UserDTO();
             dto.userId = u.Id;
             dto.name = u.Name;
@@ -373,7 +375,7 @@ public with sharing class FileHubController {
         }
         soql += ' ORDER BY Name LIMIT 10';
 
-        for (Reseller__c r : Database.query(soql)) {
+        for (Reseller__c r : Database.query(soql, AccessLevel.USER_MODE)) {
             RecordOptionDTO dto = new RecordOptionDTO();
             dto.recordId = r.Id;
             dto.primaryLabel = r.Name;
@@ -398,7 +400,7 @@ public with sharing class FileHubController {
         }
         soql += ' ORDER BY CreatedDate DESC LIMIT 10';
 
-        for (Loan__c l : Database.query(soql)) {
+        for (Loan__c l : Database.query(soql, AccessLevel.USER_MODE)) {
             RecordOptionDTO dto = new RecordOptionDTO();
             dto.recordId = l.Id;
             dto.primaryLabel = l.Name;
@@ -443,6 +445,7 @@ public with sharing class FileHubController {
             SELECT Id, Title, FileExtension
             FROM ContentDocument
             WHERE Id = :contentDocumentId
+            WITH USER_MODE
             LIMIT 1
         ];
 
@@ -458,7 +461,8 @@ public with sharing class FileHubController {
             Related_Reseller__c = relatedResellerId,
             Related_Loan__c = relatedLoanId
         );
-        insert entry;
+        // Enforce object/field create permissions for the running user (FLS/CRUD).
+        insert as user entry;
 
         // Attach the ContentDocument to the entry record so the standard "Files" related
         // list shows it. Without this link, the file lives only on the uploader's user record.
@@ -504,6 +508,7 @@ public with sharing class FileHubController {
             SELECT Id, Sender__c, ContentDocument_Id__c
             FROM File_Hub_Entry__c
             WHERE Id = :entryId
+            WITH USER_MODE
             LIMIT 1
         ];
         if (entry.Sender__c != UserInfo.getUserId()) {

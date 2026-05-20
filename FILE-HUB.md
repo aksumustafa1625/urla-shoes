@@ -153,6 +153,16 @@ A closed "detect → request → AI-validate → self-update" loop.
 - **Private object + Apex-managed sharing** — recipients see only files sent to them.
 - **with/without sharing split** — main controller honours sharing; only the read-flag
   uses a narrow bypass.
+- **FLS/CRUD enforcement** — every FileHubController read runs with
+  `Database.query(soql, AccessLevel.USER_MODE)` (static queries use `WITH USER_MODE`);
+  `createEntry` uses `insert as user`. The `File_Hub_User` permission set therefore
+  grants exactly what the feature touches (File_Hub_Entry__c CRUD, related-record read on
+  Reseller__c/Loan__c). Tests assign the permission set to their run-as users so they
+  validate under the same enforcement.
+- **Ghost-record prevention** — `ContentDocumentTrigger` (before delete) calls
+  `FileHubService.deleteOrphanedEntries`, so deleting a file from any entry point (Files
+  UI, Data Loader, Apex) removes the wrapper entries that pointed at it. `FileHubService`
+  is `inherited sharing` so the trigger-context cleanup reaches every orphan.
 - **WITH USER_MODE** — compliance queries enforce the running user's FLS/CRUD.
 - **Einstein Trust Layer** — AI call passes through masking + zero-retention + audit;
   data stays inside the Salesforce trust boundary (DSGVO-relevant for the DACH market).
@@ -175,7 +185,8 @@ A closed "detect → request → AI-validate → self-update" loop.
 ## 9. Test coverage
 | Class | Tests | Coverage |
 |---|---|---|
-| FileHubController | 21 | ~91% |
+| FileHubController | 21 | ~87% |
+| FileHubService (ghost-record) | 3 | 100% |
 | ComplianceService | 7 | 96% |
 | DocumentIntelligenceService | 8 | 83% (remainder = live LLM block) |
 | ComplianceRequestService | 7 | 97% |

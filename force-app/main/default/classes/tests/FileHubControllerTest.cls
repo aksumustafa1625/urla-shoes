@@ -49,6 +49,10 @@ private class FileHubControllerTest {
         );
         System.runAs(new User(Id = UserInfo.getUserId())) {
             insert u;
+            // Grant File Hub access so controller queries pass WITH USER_MODE
+            // (FLS/CRUD enforcement) when run as this user.
+            PermissionSet ps = [SELECT Id FROM PermissionSet WHERE Name = 'File_Hub_User' LIMIT 1];
+            insert new PermissionSetAssignment(AssigneeId = u.Id, PermissionSetId = ps.Id);
         }
         return u;
     }
