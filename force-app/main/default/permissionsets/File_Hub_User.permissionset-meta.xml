@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>File Hub User</label>
+    <description>Grants the permissions needed to use the File Hub LWC: read/create/update/delete on File_Hub_Entry__c and access to FileHubController.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <license>Salesforce</license>
+
+    <!-- Object permissions -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>File_Hub_Entry__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Document_Request__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- Field permissions — all File_Hub_Entry__c fields readable + editable -->
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Sender__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Recipient__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <!-- Category__c is required — see ContentDocument_Id__c note below -->
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Related_Reseller__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Related_Loan__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Message__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Read__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <!-- Note: ContentDocument_Id__c is required on the object so field permissions
+         cannot be explicitly granted here — Salesforce auto-grants access alongside
+         object permission. Listing it would cause a deploy error. -->
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Sent_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.File_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.File_Extension__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>File_Hub_Entry__c.Expiry_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
+    <!-- Document_Request__c fields (autonomous compliance loop) -->
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Reseller__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Document_Category__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Requirement_Label__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Status__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Requested_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Fulfilled_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Fulfilled_Entry__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Message__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Document_Request__c.Reason__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
+    <!-- Apex class access -->
+    <classAccesses>
+        <apexClass>FileHubController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>FileHubSharingHelper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ComplianceService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>DocumentIntelligenceService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ComplianceRequestService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+</PermissionSet>

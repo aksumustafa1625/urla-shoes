@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_12</activeVersionIdentifier>
+    <description>Analyzes weather conditions along a driving route and returns a safety assessment.</description>
+    <developerName>RouteWeatherAnalysis</developerName>
+    <masterLabel>RouteWeatherAnalysis</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>You are a logistics and road safety expert.
+Below are weather conditions at 5 points along a driving route from Essen to the destination:
+
+{!$Input:weatherData}
+
+Write a maximum 2-sentence safety assessment for the driver.
+Mention any dangerous conditions such as ice, snow, storm, or fog if present.
+Use plain, non-technical English.
+Do not start with labels like &quot;Route Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_1</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a logistics and road safety expert.
+Below are weather conditions at 5 points along a driving route from Essen to the destination:
+
+{!$Input:weatherData}
+
+Write a maximum 10-sentence safety assessment for the driver.
+Mention any dangerous conditions such as ice, snow, storm, or fog if present.
+Use plain, non-technical English.
+Do not start with labels like &quot;Route Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_2</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a logistics and road safety expert.
+Below are weather conditions at 5 points along a driving route from Essen to the destination:
+
+{!$Input:weatherData}
+
+Write a maximum 2-sentence safety assessment for the driver.
+Mention any dangerous conditions such as ice, snow, storm, or fog if present.
+Use technical English.
+Do not start with labels like &quot;Route Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_3</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a logistics and road safety expert.
+Below are weather conditions at 5 points along a driving route from Essen to the destination:
+
+{!$Input:weatherData}
+
+Write a maximum 2-sentence safety assessment for the driver.
+Mention any dangerous conditions such as ice, snow, storm, or fog if present.
+Use technical English and mention km and wind speed etc.
+Do not start with labels like &quot;Route Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_4</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 3-sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_5</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 20-sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_6</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 3-sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_7</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 3-sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+Lastly can you recommend place that can be visited in to destincation city
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_8</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 30-sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+Lastly can you recommend place that can be visited in to destincation city
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_9</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 3-sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+Lastly can you recommend place that can be visited in to destincation city
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Draft</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_10</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 3 - sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+Lastly can you recommend place that can be visited in to destincation city
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_11</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are a senior logistics and road safety expert with 20 years of experience in European freight operations.
+
+Below are live weather conditions at 5 waypoints along a driving route from Essen, Germany to the destination:
+
+{!$Input:weatherData}
+
+Analyze the route and write a precise 3 - sentence safety assessment using the following structure:
+- Sentence 1: Describe the most critical weather condition found on the route, including exact temperature (°C), wind speed (km/h), visibility impact, and location.
+- Sentence 2: Explain the specific road risk this creates (e.g. black ice probability, aquaplaning risk, reduced braking distance, crosswind danger on bridges/highways).
+- Sentence 3: End with one of these three verdicts based on severity:
+ * &quot;✅ Route is clear — safe to depart now.&quot;
+ * &quot;⚠️ Caution advised — consider departing in 2-3 hours when conditions improve.&quot;
+ * &quot;🚫 Do not depart — road conditions pose serious risk to safety.&quot;
+
+Use technical English. Reference specific km/h wind speeds, °C temperatures, and humidity percentages from the data. Do not use labels like &quot;Assessment:&quot; or &quot;Recommendation:&quot;.
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>weatherData</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>weatherData</masterLabel>
+            <referenceName>Input:weatherData</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>EEqLcCIdmrIjTmp/yZBiAr/XT+5MoywCy5xWMmDWAvQ=_12</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

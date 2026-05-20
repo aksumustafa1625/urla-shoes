@@ -1,0 +1,247 @@
+<template>
+    <div class="fh-wrapper">
+
+        <!-- HEADER -->
+        <div class="fh-header">
+            <div class="fh-title-block">
+                <div class="fh-title">
+                    <lightning-icon icon-name="utility:knowledge_base" size="small" variant="success" alternative-text="File Hub"></lightning-icon>
+                    <span class="fh-title-text">File Hub</span>
+                </div>
+                <div class="fh-summary">{summaryLine}</div>
+            </div>
+            <div class="fh-header-actions">
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    alternative-text="Refresh"
+                    title="Refresh"
+                    variant="bare"
+                    onclick={handleRefresh}>
+                </lightning-button-icon>
+                <template if:false={isRecordPage}>
+                    <lightning-button
+                        label="Send New File"
+                        icon-name="utility:share"
+                        variant="brand"
+                        onclick={handleOpenSendModal}
+                        class="fh-send-btn">
+                    </lightning-button>
+                </template>
+            </div>
+        </div>
+
+        <!-- TABS (home page only) -->
+        <template if:true={isHomePage}>
+            <div class="fh-tabs">
+                <div class={myFilesTabClass} data-tab="myFiles" onclick={handleTabClick}>
+                    My Files
+                </div>
+                <div class={inboxTabClass} data-tab="inbox" onclick={handleTabClick}>
+                    {inboxTabLabel}
+                </div>
+                <div class={sentTabClass} data-tab="sent" onclick={handleTabClick}>
+                    Sent
+                </div>
+            </div>
+        </template>
+
+        <!-- CATEGORY TILES (colored, compact) -->
+        <div class="fh-tile-bar">
+            <template for:each={categoryTiles} for:item="tile">
+                <div key={tile.key}
+                     class={tile.tileClass}
+                     style={tile.tileStyle}
+                     data-key={tile.key}
+                     onclick={handleTileClick}>
+                    <div class="fh-tile-top">
+                        <lightning-icon icon-name={tile.icon} size="x-small" style={tile.iconStyle} alternative-text={tile.label}></lightning-icon>
+                        <span class="fh-tile-count">{tile.count}</span>
+                    </div>
+                    <div class="fh-tile-label">{tile.label}</div>
+                </div>
+            </template>
+        </div>
+
+        <!-- CURRENT-MONTH ACTIVITY HEATMAP (GitHub-style greens) -->
+        <template if:true={hasHeatmap}>
+            <div class="fh-heatmap">
+                <div class="fh-heatmap-header">
+                    <span class="fh-heatmap-label">{heatmapLabel}</span>
+                    <div class="fh-heatmap-legend">
+                        <span class="fh-heatmap-legend-text">Less</span>
+                        <div class="fh-heatmap-legend-sq" style="background:#ebedf0;"></div>
+                        <div class="fh-heatmap-legend-sq" style="background:#9be9a8;"></div>
+                        <div class="fh-heatmap-legend-sq" style="background:#40c463;"></div>
+                        <div class="fh-heatmap-legend-sq" style="background:#30a14e;"></div>
+                        <div class="fh-heatmap-legend-sq" style="background:#216e39;"></div>
+                        <span class="fh-heatmap-legend-text">More</span>
+                    </div>
+                </div>
+                <div class="fh-heatmap-grid" style={heatmapGridStyle}>
+                    <template for:each={decoratedHeatmap} for:item="day">
+                        <div key={day.key}
+                             class={day.cellClass}
+                             style={day.style}
+                             title={day.tooltip}>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <!-- SEARCH -->
+        <div class="fh-filters">
+            <div class="fh-search">
+                <lightning-input
+                    type="search"
+                    placeholder="Search files..."
+                    value={searchTerm}
+                    onchange={handleSearchInput}
+                    variant="label-hidden"
+                    label="Search">
+                </lightning-input>
+            </div>
+        </div>
+
+        <!-- UPLOAD AREA (My Files tab and record page) -->
+        <template if:true={isMyFilesTab}>
+            <div class="fh-upload">
+                <lightning-file-upload
+                    label=""
+                    name="fileUploader"
+                    accept={acceptedFormats}
+                    record-id={recordId}
+                    onuploadfinished={handleUploadFinished}
+                    multiple>
+                </lightning-file-upload>
+                <p class="fh-upload-hint">Drag files above or click "Upload Files" to add to your personal library.</p>
+            </div>
+        </template>
+
+        <template if:true={isRecordPage}>
+            <div class="fh-upload">
+                <lightning-file-upload
+                    label=""
+                    name="fileUploader"
+                    accept={acceptedFormats}
+                    record-id={recordId}
+                    onuploadfinished={handleUploadFinished}
+                    multiple>
+                </lightning-file-upload>
+                <p class="fh-upload-hint">Upload files to link them to this record.</p>
+            </div>
+        </template>
+
+        <!-- LOADING -->
+        <template if:true={isLoading}>
+            <div class="fh-loading">
+                <lightning-spinner alternative-text="Loading files..." size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- LIST -->
+        <template if:false={isLoading}>
+            <template if:true={hasEntries}>
+                <div class="fh-list">
+                    <template for:each={entries} for:item="entry">
+                        <div key={entry.entryId} class={entry.rowClass} style={entry.rowStyle}>
+                            <div class="fh-row-icon">
+                                <lightning-icon
+                                    icon-name={entry.iconName}
+                                    size="medium"
+                                    alternative-text={entry.fileName}>
+                                </lightning-icon>
+                            </div>
+                            <div class="fh-row-body">
+                                <div class="fh-row-title" data-docid={entry.contentDocumentId} onclick={handlePreview}>
+                                    {entry.fileName}
+                                </div>
+                                <div class="fh-row-meta">
+                                    <span class="fh-tag" style={entry.tagStyle}>{entry.category}</span>
+                                    <span class="fh-row-from">{entry.fromLine}</span>
+                                    <span class="fh-row-date">· {entry.relativeDate}</span>
+                                </div>
+                                <template if:true={entry.hasRelated}>
+                                    <div class="fh-row-related">{entry.relatedLabel}</div>
+                                </template>
+                                <template if:true={entry.hasMessage}>
+                                    <div class="fh-row-message">"{entry.message}"</div>
+                                </template>
+                            </div>
+                            <div class="fh-row-actions">
+                                <lightning-button-icon
+                                    icon-name="utility:preview"
+                                    alternative-text="Preview"
+                                    title="Preview"
+                                    variant="bare"
+                                    data-docid={entry.contentDocumentId}
+                                    onclick={handlePreview}>
+                                </lightning-button-icon>
+                                <template if:true={entry.showMarkRead}>
+                                    <lightning-button-icon
+                                        icon-name="utility:check"
+                                        alternative-text="Mark as read"
+                                        title="Mark as read"
+                                        variant="bare"
+                                        data-id={entry.entryId}
+                                        onclick={handleMarkRead}>
+                                    </lightning-button-icon>
+                                </template>
+                                <template if:true={entry.showDelete}>
+                                    <lightning-button-icon
+                                        icon-name="utility:delete"
+                                        alternative-text="Delete"
+                                        title="Delete"
+                                        variant="bare"
+                                        data-id={entry.entryId}
+                                        onclick={handleDelete}>
+                                    </lightning-button-icon>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasEntries}>
+                <div class="fh-empty">
+                    <lightning-icon icon-name="doctype:folder" size="medium" alternative-text="No files"></lightning-icon>
+                    <p>{emptyStateMessage}</p>
+                </div>
+            </template>
+        </template>
+
+        <!-- RECENT ACTIVITY (home page only) -->
+        <template if:true={isHomePage}>
+            <template if:true={hasRecentActivity}>
+                <div class="fh-activity">
+                    <div class="fh-activity-header">RECENT ACTIVITY</div>
+                    <template for:each={recentActivity} for:item="event">
+                        <div key={event.entryId} class="fh-activity-row">
+                            <lightning-icon icon-name={event.iconName} size="x-small" class="fh-activity-icon"></lightning-icon>
+                            <div class="fh-activity-body">
+                                <div class="fh-activity-line">
+                                    <span class="fh-activity-action">{event.summary}</span>
+                                    <span class="fh-activity-file">· {event.fileName}</span>
+                                </div>
+                                <template if:true={event.hasContext}>
+                                    <div class="fh-activity-context">{event.recordContext}</div>
+                                </template>
+                            </div>
+                            <div class="fh-activity-time">{event.relative}</div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </template>
+
+        <!-- SEND MODAL -->
+        <template if:true={showSendModal}>
+            <c-file-hub-send-modal
+                onclose={handleCloseSendModal}
+                onsuccess={handleSendModalSuccess}>
+            </c-file-hub-send-modal>
+        </template>
+
+    </div>
+</template>

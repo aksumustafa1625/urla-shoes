@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Has_Expiry__c</fullName>
+    <description>When true, a document of this type is evaluated against its Expiry_Date__c — expired or expiring-soon documents reduce the reseller's compliance score.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Has Expiry</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+</CustomField>

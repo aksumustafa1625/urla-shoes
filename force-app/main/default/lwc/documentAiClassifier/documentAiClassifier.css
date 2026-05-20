@@ -1,0 +1,126 @@
+.ai-wrapper {
+    padding: 8px 12px 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #16325c;
+}
+.ai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.ai-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 600;
+}
+.ai-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.ai-row {
+    border: 1px solid #eef1f6;
+    border-radius: 6px;
+    padding: 10px;
+    background: #ffffff;
+    transition: box-shadow 0.12s;
+}
+.ai-row:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.ai-row-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.ai-file {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+.ai-file-text {
+    min-width: 0;
+}
+.ai-file-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #16325c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.ai-file-meta {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #54698d;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ai-cat-chip {
+    background: #eef4fb;
+    color: #0b5cab;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.ai-expiry {
+    color: #80949c;
+}
+.ai-action {
+    flex-shrink: 0;
+    min-width: 150px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* AI RESULT BLOCK */
+.ai-result {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border-left: 3px solid #9050e9;
+}
+.ai-result-ok {
+    background: #f3effc;
+    border-left-color: #9050e9;
+}
+.ai-result-warn {
+    background: #fff5ea;
+    border-left-color: #fe9339;
+}
+.ai-result-body {
+    flex: 1;
+    min-width: 0;
+}
+.ai-result-headline {
+    font-size: 12px;
+    font-weight: 600;
+    color: #16325c;
+}
+.ai-result-summary {
+    font-size: 12px;
+    color: #54698d;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+/* EMPTY */
+.ai-empty {
+    text-align: center;
+    padding: 24px 16px;
+    color: #80949c;
+}
+.ai-empty p {
+    margin-top: 8px;
+    font-size: 13px;
+}

@@ -1,0 +1,23 @@
+.fhsm-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.fhsm-uploaded {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ecf6e6;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #2e844a;
+}
+.fhsm-uploaded-name {
+    flex: 1;
+    font-size: 13px;
+    color: #16325c;
+    font-weight: 500;
+}
+.fhsm-uploaded-check {
+    --sds-c-icon-color-foreground-default: #2e844a;
+}

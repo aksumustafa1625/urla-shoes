@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Related_Reseller__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Optional link to a Reseller record. When set, the file appears in the Reseller's File Hub embed.</description>
+    <label>Related Reseller</label>
+    <referenceTo>Reseller__c</referenceTo>
+    <relationshipLabel>File Hub Entries</relationshipLabel>
+    <relationshipName>File_Hub_Entries</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

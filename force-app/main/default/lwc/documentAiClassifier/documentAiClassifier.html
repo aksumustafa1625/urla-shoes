@@ -1,0 +1,74 @@
+<template>
+    <lightning-card>
+        <div class="ai-wrapper">
+            <div class="ai-header">
+                <div class="ai-title">
+                    <lightning-icon icon-name="utility:einstein" size="x-small" variant="success"></lightning-icon>
+                    <span>AI Document Classifier</span>
+                </div>
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    alternative-text="Refresh"
+                    title="Refresh"
+                    variant="bare"
+                    onclick={handleRefresh}>
+                </lightning-button-icon>
+            </div>
+
+            <template if:true={hasEntries}>
+                <div class="ai-list">
+                    <template for:each={decoratedEntries} for:item="e">
+                        <div key={e.entryId} class="ai-row">
+                            <div class="ai-row-main">
+                                <div class="ai-file">
+                                    <lightning-icon icon-name="doctype:pdf" size="small"></lightning-icon>
+                                    <div class="ai-file-text">
+                                        <div class="ai-file-name">{e.fileName}</div>
+                                        <div class="ai-file-meta">
+                                            <span class="ai-cat-chip">{e.category}</span>
+                                            <template if:true={e.expiryLabel}>
+                                                <span class="ai-expiry">· exp {e.expiryLabel}</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ai-action">
+                                    <template if:true={e.isLoading}>
+                                        <lightning-spinner alternative-text="Analyzing" size="small"></lightning-spinner>
+                                    </template>
+                                    <template if:false={e.isLoading}>
+                                        <lightning-button
+                                            label="Analyze with AI"
+                                            icon-name="utility:einstein"
+                                            variant="brand-outline"
+                                            data-id={e.entryId}
+                                            onclick={handleAnalyze}>
+                                        </lightning-button>
+                                    </template>
+                                </div>
+                            </div>
+                            <template if:true={e.hasResult}>
+                                <div class={e.resultClass}>
+                                    <lightning-icon icon-name="utility:einstein" size="xx-small"></lightning-icon>
+                                    <div class="ai-result-body">
+                                        <div class="ai-result-headline">{e.resultText}</div>
+                                        <template if:true={e.resultSummary}>
+                                            <div class="ai-result-summary">"{e.resultSummary}"</div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasEntries}>
+                <div class="ai-empty">
+                    <lightning-icon icon-name="utility:einstein" size="small"></lightning-icon>
+                    <p>No documents linked to this reseller yet. Upload files in File Hub, then analyze them here.</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

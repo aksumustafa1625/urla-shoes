@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <label>Bank Details</label>
+    <protected>false</protected>
+    <values>
+        <field>Document_Category__c</field>
+        <value xsi:type="xsd:string">Bank Details</value>
+    </values>
+    <values>
+        <field>Requirement_Label__c</field>
+        <value xsi:type="xsd:string">Bank Account Details</value>
+    </values>
+    <values>
+        <field>Has_Expiry__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Warning_Days__c</field>
+        <value xsi:type="xsd:double">30</value>
+    </values>
+    <values>
+        <field>Sort_Order__c</field>
+        <value xsi:type="xsd:double">4</value>
+    </values>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+</CustomMetadata>

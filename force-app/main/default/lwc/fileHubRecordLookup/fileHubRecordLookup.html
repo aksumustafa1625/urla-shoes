@@ -1,0 +1,65 @@
+<template>
+    <div class="fhrl-wrapper">
+
+        <!-- Selected pill -->
+        <template if:true={hasSelection}>
+            <div class="fhrl-selected">
+                <lightning-icon icon-name="utility:record_lookup" size="x-small" alternative-text="Record"></lightning-icon>
+                <span class="fhrl-selected-name">{selectedLabel}</span>
+                <lightning-button-icon
+                    icon-name="utility:close"
+                    alternative-text="Clear"
+                    title="Clear"
+                    variant="bare"
+                    size="x-small"
+                    onclick={handleClear}>
+                </lightning-button-icon>
+            </div>
+        </template>
+
+        <!-- Search input -->
+        <template if:false={hasSelection}>
+            <lightning-input
+                type="search"
+                variant="label-hidden"
+                label="Search records"
+                placeholder={inputPlaceholder}
+                value={searchTerm}
+                onchange={handleInput}
+                onfocus={handleFocus}
+                onblur={handleBlur}>
+            </lightning-input>
+        </template>
+
+        <!-- Dropdown -->
+        <template if:true={showDropdown}>
+            <div class="fhrl-dropdown">
+                <template if:true={isSearching}>
+                    <div class="fhrl-dropdown-loading">Searching...</div>
+                </template>
+                <template if:true={hasResults}>
+                    <template for:each={results} for:item="record">
+                        <div
+                            key={record.recordId}
+                            class="fhrl-result"
+                            data-id={record.recordId}
+                            onmousedown={handleSelect}>
+                            <div class="fhrl-result-text">
+                                <div class="fhrl-result-primary">{record.primaryLabel}</div>
+                                <template if:true={record.hasSecondary}>
+                                    <div class="fhrl-result-secondary">{record.secondaryLabel}</div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={hasResults}>
+                    <template if:false={isSearching}>
+                        <div class="fhrl-dropdown-empty">No records found.</div>
+                    </template>
+                </template>
+            </div>
+        </template>
+
+    </div>
+</template>

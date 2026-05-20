@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sort_Order__c</fullName>
+    <description>Left-to-right column order in the cockpit and top-to-bottom row order in the checklist.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Sort Order</label>
+    <precision>4</precision>
+    <scale>0</scale>
+    <required>false</required>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

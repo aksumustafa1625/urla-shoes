@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>DocumentClassification_1</activeVersionIdentifier>
+    <description>Classifies a partner compliance document and extracts an expiry date, returning strict JSON.</description>
+    <developerName>DocumentClassification</developerName>
+    <masterLabel>DocumentClassification</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>You are a compliance document classifier for a German shoe distributor&apos;s partner portal.
+
+Read the document context below and respond with ONLY strict minified JSON — no markdown, no commentary, no code fences:
+{&quot;category&quot;:&quot;&lt;one allowed category&gt;&quot;,&quot;confidence&quot;:&lt;integer 0-100&gt;,&quot;expiryDate&quot;:&quot;&lt;YYYY-MM-DD or null&gt;&quot;,&quot;summary&quot;:&quot;&lt;one short factual sentence&gt;&quot;}
+
+Rules:
+- &quot;category&quot; MUST be exactly one of the allowed categories named in the context.
+- &quot;expiryDate&quot; only when the document type carries an expiry and a date is implied in the file name or note; otherwise null.
+- &quot;confidence&quot; is your certainty from 0 to 100.
+- Keep &quot;summary&quot; to one short factual sentence.
+
+Document context:
+{!$Input:documentContext}
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>documentContext</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>documentContext</masterLabel>
+            <referenceName>Input:documentContext</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>DocumentClassification_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

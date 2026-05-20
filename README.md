@@ -1,99 +1,111 @@
-# Urla Shoes - Salesforce DX Project
+# Urla Shoes — Salesforce DX Reference Project
 
-## Overview
+A multi-feature Salesforce reference implementation for a fictitious shoe-distribution company. Designed to demonstrate production-shaped patterns across LWC, Apex, async integration, real-time dashboards, Einstein AI, and document management.
 
-Salesforce DX project for Urla Shoes. Includes an Apex solution that enriches Contact records with country data from the [Nationalize.io](https://api.nationalize.io) external API.
+## Features
 
-When a new Contact is created with a FirstName, the system automatically calls the Nationalize.io API to predict the most likely country of origin and stores the result in the `Nationalized_Country__c` field.
+| # | Feature | Stack | Description |
+|---|---------|-------|-------------|
+| 1 | **Route & Weather Navigator** | LWC + VF bridge + Apex + Einstein | Google Maps route planner with 5-waypoint OpenWeather sampling and a GPT-4o mini safety verdict via the Einstein Trust Layer. |
+| 2 | **Loan Creation Pipeline** | Apex Trigger + Queueable + Scheduler + LWC | Auto-creates a Loan record on Closed-Won Opportunity, syncs to a core system via async callout, retries failures, audits every attempt, and surfaces state in an admin LWC dashboard. |
+| 3 | **Contact Nationalization** | Apex Queueable + HttpCalloutMock | Reference implementation showing the canonical pattern for trigger → Queueable → external API enrichment, fully test-covered. |
+| 4 | **Reseller Matching Engine** | Apex Trigger + Selector + Service | Resolves Opportunity → Reseller via email then domain fallback, with diagnostic logging for unmatched cases and a magic-link partner-registration email. |
+| 5 | **Lead Queue + Shift Dashboard** | LWC + Platform Events + Schedulable | Round-robin lead assignment across shift-bound reps with SLA expiry, real-time dashboard via push + poll, and timezone-aware scheduling. |
+| 6 | **Reseller Tier Badge** | LWC + uiRecordApi | Roadmap visualisation of Bronze → Silver → Gold → Platinum partner tiers with progress to next tier. |
+| 7 | **Partner Document Center (File Hub)** | LWC + Apex + ContentDocument | Modern document-management surface over Salesforce Files — categorize, send, receive, and link files to Reseller / Loan records. See [FILE-HUB.md](FILE-HUB.md). |
+| 8 | **Opportunity Task Score** | Apex Trigger + AggregateResult | Auto-maintained `Score__c` and `completed_task__c` on Opportunity from related Tasks. |
 
-## Contact Nationalization Feature
-
-### Architecture
+## Architecture overview
 
 ```
-Contact Insert
-  -> ContactTrigger (after insert)
-    -> ContactTriggerHandler.afterInsert()
-      -> NationalizeService (Queueable + AllowsCallouts)
-        -> HTTP GET https://api.nationalize.io/?name=<FirstName>
-        -> Parse JSON -> highest probability country_id
-        -> Update Contact.Nationalized_Country__c
+LWC Layer
+ ├── routeWeather              (Maps + Weather + Einstein orchestrator)
+ ├── loanSyncDashboard         (Loan retry + audit dashboard)
+ ├── leadShiftDashboard        (Real-time shift + queue dashboard)
+ ├── resellerTierBadge         (Partner tier visualisation)
+ ├── fileHub                   (Document management — home + record page)
+ ├── fileHubSendModal          (Send-to-user modal)
+ ├── fileHubUserLookup         (Reusable user picker)
+ └── urlaShoesHeader           (Branded app header)
+
+Visualforce Bridge
+ └── RouteMapPage              (Google Maps SDK host — LWS escape hatch)
+
+Apex Layer
+ ├── handlers/                 (Trigger handlers — Kevin O'Hara pattern)
+ ├── services/                 (Business logic — Loan, Lead, Reseller, Nationalize)
+ ├── engines/                  (Stateful algorithms — round robin, matching)
+ ├── selectors/                (SOQL boundary — Shift, Reseller Mapping)
+ ├── controller/               (LWC-facing Aura entrypoints)
+ ├── factories/                (Test data + HttpCalloutMock)
+ ├── tests/                    (Apex test classes)
+ └── utils/                    (Pure helpers — EmailUtils)
+
+Custom Objects
+ ├── Loan__c                   (Closed-Won pipeline output)
+ ├── Loan_Sync_Log__c          (Per-attempt audit trail)
+ ├── File_Hub_Entry__c         (File metadata wrapper)
+ ├── API_Config__c             (Hierarchical custom setting for keys)
+ └── Lead_Shift_Event__e       (Platform Event for real-time dashboard)
+
+Einstein
+ └── RouteWeatherAnalysis      (Prompt Template via Einstein Trust Layer)
 ```
 
-### Components
+## Prerequisites
 
-| Component | Type | Location | Purpose |
-|-----------|------|----------|---------|
-| `ContactTrigger` | Apex Trigger | `force-app/main/default/triggers/` | Fires on Contact after insert |
-| `ContactTriggerHandler` | Apex Class | `force-app/main/default/classes/handlers/` | Extends TriggerHandler, enqueues NationalizeService |
-| `NationalizeService` | Apex Class | `force-app/main/default/classes/services/` | Queueable job: calls API, parses response, updates Contact |
-| `NationalizeCalloutMock` | Apex Class | `force-app/main/default/classes/factories/` | HttpCalloutMock for test scenarios |
-| `NationalizeServiceTest` | Apex Class | `force-app/main/default/classes/tests/` | Test class covering success, empty, error, bulk scenarios |
-| `Nationalized_Country__c` | Custom Field | `force-app/main/default/objects/Contact/fields/` | Text(10) field on Contact for country code |
-| `Nationalize_API` | Remote Site Setting | `force-app/main/default/remoteSiteSettings/` | Allows callout to api.nationalize.io |
-
-### Technical Details
-
-- **Bulk-safe**: Handler collects all Contact Ids and passes them to a single Queueable job
-- **Async callout**: Uses `Queueable` with `Database.AllowsCallouts` since triggers cannot make direct HTTP callouts
-- **Error handling**: Gracefully handles missing FirstName, API failures (non-200 status), empty responses, and exceptions
-- **JSON parsing**: Selects the country with the highest probability from the API response
-
-## Setup & Deployment
-
-### Prerequisites
-
-- Salesforce CLI (`sf` or `sfdx`)
+- Salesforce CLI (`sf` 2.0+)
 - VS Code with Salesforce Extension Pack
-- A Salesforce Developer Org or Scratch Org
+- A Developer Edition org or Scratch Org with:
+  - State & Country Picklists enabled
+  - Einstein Generative AI enabled (for Route Weather Navigator)
 
-### Steps
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd "Urla Shoes"
-   ```
-
-2. **Authorize your org**
-   ```bash
-   sf org login web --alias urla-shoes
-   ```
-
-3. **Deploy to org**
-   ```bash
-   sf project deploy start --target-org urla-shoes
-   ```
-
-4. **Run tests**
-   ```bash
-   sf apex run test --class-names NationalizeServiceTest --target-org urla-shoes --result-format human
-   ```
-
-5. **Verify**: Create a Contact with a FirstName in Salesforce. After a moment, the `Nationalized Country` field should populate with a country code.
-
-## Running Tests
+## Setup
 
 ```bash
-# Run all tests
-sf apex run test --target-org urla-shoes --result-format human
+# Clone + authorize
+git clone <repository-url>
+cd "Urla Shoes"
+sf org login web --alias urla-shoes
 
-# Run only the Nationalize tests
-sf apex run test --class-names NationalizeServiceTest --target-org urla-shoes --result-format human --code-coverage
+# Deploy
+sf project deploy start --target-org urla-shoes
+
+# Run all tests
+sf apex run test --target-org urla-shoes --result-format human --code-coverage
 ```
 
-### Test Scenarios Covered
+### Per-feature post-deploy
 
-- **Success**: API returns country data -> field updated with highest probability country
-- **Empty response**: API returns empty country array -> field stays null
-- **Error**: API returns HTTP 500 -> field stays null, no exception thrown
-- **No FirstName**: Contact without FirstName -> service not triggered
-- **Bulk insert**: 10 contacts inserted at once -> all processed correctly
-- **parseCountry unit test**: Direct method test for JSON parsing logic
+| Feature | Post-deploy step |
+|---------|------------------|
+| Route Weather Navigator | Setup → Custom Settings → API Config → Manage → set Google Maps + OpenWeather keys |
+| Route Weather Navigator | Setup → Einstein → Prompt Builder → activate `RouteWeatherAnalysis` template |
+| Loan Pipeline | Anonymous Apex: `System.schedule('Loan Sync Retry', '0 0,15,30,45 * * * ?', new LoanSyncRetryScheduler());` |
+| Lead Queue | Anonymous Apex: `LeadQueueScheduler.startScheduler();` |
+| File Hub | Assign `File_Hub_User` permission set + drop the `fileHub` LWC into Home, Reseller, Loan pages via Lightning App Builder |
 
-## Additional Resources
+## Test coverage
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Nationalize.io API Documentation](https://nationalize.io/)
+```bash
+sf apex run test \
+  --target-org urla-shoes \
+  --code-coverage \
+  --result-format human
+```
+
+Specific test classes:
+- `NationalizeServiceTest` — 6 scenarios covering external API integration
+- `OpportunityLoanTriggerHandlerTest` — 9 scenarios covering Closed-Won → Loan → Sync flow
+- `FileHubControllerTest` — 12 scenarios covering send / receive / share / delete
+- `TriggerHandler_Test` — base class smoke tests
+
+## Deep dives
+
+| Document | Topic |
+|----------|-------|
+| [FILE-HUB.md](FILE-HUB.md) | Partner Document Center architecture and post-deploy setup |
+
+## License
+
+Educational / portfolio use. External API keys must be your own.
