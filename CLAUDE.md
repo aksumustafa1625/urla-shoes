@@ -2,7 +2,7 @@
 
 **This is the first file Claude reads in a new session.** It captures everything that exists, the most recent active work, what's deployed, and how to pick up where we left off.
 
-Last updated: **2026-05-13** (session ended with File Hub v5 — GitHub-style monthly heatmap)
+Last updated: **2026-05-20** (Notion publisher + Partner Compliance Cockpit 3 phases + File Hub FLS/ghost-record hardening)
 
 ---
 
@@ -22,11 +22,14 @@ The fictional company is a Germany-based shoe distributor with a reseller/partne
 - Apex (Queueable, Schedulable, Trigger Handler framework — Kevin O'Hara pattern)
 - Lightning Web Components (LWC)
 - Visualforce (single use: Google Maps iframe bridge for LWS workaround)
-- Salesforce Einstein (Prompt Templates + ConnectApi.EinsteinLLM)
+- Salesforce Einstein (Prompt Templates + ConnectApi.EinsteinLLM; `DocumentClassification` template authored as deployable `GenAiPromptTemplate` metadata)
 - Native ContentDocument / ContentVersion for file storage
 - Platform Events (Lead_Shift_Event__e for real-time dashboard)
-- Custom Settings (API_Config__c) — admin-managed config
-- Custom Objects: Loan__c, Loan_Sync_Log__c, File_Hub_Entry__c, Lead_Queue__c, Reseller__c, Reseller_Mapping__c, Reseller_Match_Log__c, Shift__c, SLA_Breach_Log__c, plus fields on standard Opportunity/Contact
+- Lightning Message Service (Compliance_Update channel — live cross-component re-score)
+- Custom Settings (API_Config__c, Notion_Config__c) — admin-managed config
+- Custom Metadata Types (Compliance_Requirement__mdt — admin-managed requirements)
+- FLS/CRUD enforcement: `WITH USER_MODE` / `Database.query(..., AccessLevel.USER_MODE)` / `insert as user` across File Hub + compliance services
+- Custom Objects: Loan__c, Loan_Sync_Log__c, File_Hub_Entry__c, Document_Request__c, Lead_Queue__c, Reseller__c, Reseller_Mapping__c, Reseller_Match_Log__c, Shift__c, SLA_Breach_Log__c, plus fields on standard Opportunity/Contact
 
 ---
 
@@ -50,13 +53,26 @@ The fictional company is a Germany-based shoe distributor with a reseller/partne
 | 5 | **Lead Queue + Shift** | ✓ Working | engines/LeadQueueProcessor, services/LeadQueueService, services/LeadQueueScheduler, lwc/leadShiftDashboard |
 | 6 | **Reseller Tier Badge** | ✓ Working | lwc/resellerTierBadge |
 | 7 | **Task → Opp Score aggregation** | ✓ Working | triggers/TaskTrigger, handlers/TaskTriggerHandler |
-| 8 | **File Hub** (Partner Document Center) | ✓ Deployed v5 | lwc/fileHub, lwc/fileHubSendModal, lwc/fileHubUserLookup, lwc/fileHubRecordLookup, classes/controller/FileHubController, classes/controller/FileHubSharingHelper |
+| 8 | **File Hub** (Partner Document Center) | ✓ Deployed v5 + hardened | lwc/fileHub, lwc/fileHubSendModal, lwc/fileHubUserLookup, lwc/fileHubRecordLookup, classes/controller/FileHubController, classes/controller/FileHubSharingHelper, classes/services/FileHubService, triggers/ContentDocumentTrigger |
+| 9 | **Notion Publisher** | ✓ Deployed | classes/services/NotionPublisher, classes/others/UrlaInterviewPrepNotion, objects/Notion_Config__c, remoteSiteSettings/Notion_API — publishes 9 STAR-format feature pages to Notion via REST API |
+| 10 | **Partner Compliance Cockpit** (3 phases, autonomous AI loop) | ✓ Deployed + live | objects/Compliance_Requirement__mdt, objects/Document_Request__c, classes/services/ComplianceService + DocumentIntelligenceService + ComplianceRequestService, genAiPromptTemplates/DocumentClassification, lwc/complianceCockpit + resellerComplianceChecklist + documentAiClassifier + documentRequests, messageChannels/Compliance_Update |
 
 ---
 
-## 5. Most recent active work — File Hub feature
+## 5. Most recent active work — Partner Compliance Cockpit (on File Hub)
 
-This is the **last major thing built** and the most likely follow-up area. Documented in detail in [FILE-HUB.md](FILE-HUB.md) at the repo root.
+The **last major thing built** (2026-05-20). Full detail in [FILE-HUB.md](FILE-HUB.md). It extends File Hub into an autonomous, AI-augmented partner compliance platform:
+
+- **Phase 1** — `Compliance_Requirement__mdt` (4 admin-managed requirements) + `ComplianceService` (MISSING/EXPIRED/EXPIRING/OK status + score, `WITH USER_MODE`) + `complianceCockpit` (network matrix) & `resellerComplianceChecklist` (score ring) LWCs.
+- **Phase 2** — `DocumentIntelligenceService.classifyAndApply` calls the `DocumentClassification` Einstein Prompt Template (GPT-4o mini, authored as metadata) → classifies + extracts expiry + applies; `@TestVisible mockLlmText` for tests. **Verified live** (real GPT-4o mini call). `documentAiClassifier` LWC.
+- **Phase 3** — `Document_Request__c` + `ComplianceRequestService` (requestAllGaps sweep, autoFulfill, best-effort email) + `documentRequests` LWC. `Compliance_Update` LMS wires AI-classify → live re-score. Closed loop: detect → request → AI-validate → auto-fulfill → live score.
+- **Hardening (review-driven)** — File Hub now enforces FLS/CRUD (`USER_MODE` / `insert as user`); `ContentDocumentTrigger` + `FileHubService` prevent ghost records when a native file is deleted from any entry point.
+
+User must place LWCs via Lightning App Builder (cockpit on Home/App page; checklist + classifier + requests on Reseller record page). Prompt Template `DocumentClassification` is deployed & active.
+
+### (Prior) File Hub v5 reference
+
+The base File Hub (v5 — month heatmap) details below remain accurate.
 
 ### What it is
 Custom file management layer on top of Salesforce's native ContentDocument/ContentVersion. Sender/recipient/category/record-link semantics on top of raw file storage. Renders on the Home page (3 tabs: My Files / Inbox / Sent) and on Reseller / Loan record pages (record-scoped view).
@@ -297,8 +313,13 @@ sf org assign permset --name File_Hub_User --target-org "Urla Shoes"
 1. **Required fields in PermissionSet** — listing `<fieldPermissions>` for a required field throws `cannot deploy to a required field`. Omit; required-field access is auto-granted with object access.
 2. **Sharing model conflict with Apex shares** — `<sharingModel>ReadWrite</sharingModel>` makes Read-level Apex shares "trivial" and Salesforce rejects them. Set to `Private` and use Apex-managed shares.
 3. **Underscore prefix in Apex identifiers** — `_emptyCategoryMap` is invalid (`Invalid character in identifier`). Use camelCase like `buildEmptyCategoryMap`.
-4. **`like` is a SOQL reserved word** in Apex — can't be a local variable name. Use `searchPattern` or similar.
+4. **`like` is a SOQL reserved word** in Apex — can't be a local variable name. Use `searchPattern` or similar. Also reserved: `list`, `json` (collides with the `JSON` class — Apex is case-insensitive), `end`.
 5. **MIXED_DML_OPERATION in tests** — wrap User DML in `System.runAs(new User(Id = UserInfo.getUserId())) { ... }` to bypass.
+6. **Custom Metadata records throw UNKNOWN_EXCEPTION** on deploy unless the root `<CustomMetadata>` declares `xmlns:xsd="http://www.w3.org/2001/XMLSchema"` (the `xsd:` prefix in `<value xsi:type="xsd:string">` must be bound).
+7. **Einstein Prompt Templates are deployable** as `GenAiPromptTemplate` metadata — retrieve a working one (e.g. RouteWeatherAnalysis) as a structural template; a new template accepts a simple `versionIdentifier` like `DocumentClassification_1`.
+8. **`Reseller__c.Tier__c` is a read-only formula** — never set it in test data (`Field is not writeable`).
+9. **PermissionSet `objectPermissions` blocks must be contiguous** — interleaving them with `fieldPermissions` throws `Element objectPermissions is duplicated`.
+10. **WITH USER_MODE enforces cross-object FLS** — queries traversing `Related_Reseller__r.Name` require the running user to have read on Reseller__c/Loan__c; grant it in the permission set and assign that permset to test run-as users.
 
 ---
 
@@ -349,10 +370,11 @@ Then asked for this CLAUDE.md file to capture everything.
 (git log review next session can refresh, but key milestones:)
 - Initial project import (features 1-7 already built)
 - API_Config__c migration (keys moved out of source)
-- File Hub initial build (this session)
-- File Hub v2-v5 iterations (this session)
+- File Hub initial build + v2-v5 iterations
+- `Add Partner Compliance Cockpit + autonomous AI loop on File Hub; Notion publisher`
+- `Harden File Hub: FLS/CRUD enforcement + ghost-record orphan prevention`
 
-Branch: `feature/contact-nationalization` (active throughout session). Most work uncommitted at session end — git status will show all File Hub additions as untracked/modified.
+Branch: `feature/contact-nationalization`. Work is committed (not pushed — user pushes manually). 53 tests green across File Hub + compliance + AI + Notion.
 
 ---
 
