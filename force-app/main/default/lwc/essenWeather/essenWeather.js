@@ -14,7 +14,9 @@ export default class EssenWeather extends LightningElement {
     // Default city — Essen
     _city = 'Essen,DE';
  
-    apiKey = 'REDACTED_OPENWEATHER_KEY';
+    // SECURITY: never hardcode the key. Load it from the API_Config__c Custom
+    // Setting via ApiKeyService (same pattern as the routeWeather component).
+    apiKey = '';
     _timer;
  
     // ── Lifecycle ──────────────────────────────────────────────

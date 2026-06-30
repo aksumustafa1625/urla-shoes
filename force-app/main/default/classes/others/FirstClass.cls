@@ -39,7 +39,7 @@ public with sharing class FirstClass {
 //     <div id="map"></div>
 
 //     <script>
-//         var MAPS_KEY = 'REDACTED_GOOGLE_MAPS_KEY'; // ← buraya key'ini gir
+//         var MAPS_KEY = 'YOUR_GOOGLE_MAPS_API_KEY'; // load from a Custom Setting — never hardcode
 
 //         var map, directionsRenderer, directionsService;
 //         var ORIGIN = { lat: 51.4556, lng: 7.0116 }; // Essen
