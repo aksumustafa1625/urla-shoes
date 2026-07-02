@@ -49,3 +49,8 @@ $RECYCLE.BIN/
 
 # Personal interview prep notes — kept local, not pushed
 interview-prep/
+
+# Real API keys — local only, never committed. Keys live in the org's
+# API_Config__c Custom Setting. Copy setApiKeys.example.apex to this file,
+# paste your real Google Maps + OpenWeather keys, and run it once.
+scripts/apex/setApiKeys.apex
