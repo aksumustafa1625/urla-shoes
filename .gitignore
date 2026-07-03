@@ -54,3 +54,6 @@ interview-prep/
 # API_Config__c Custom Setting. Copy setApiKeys.example.apex to this file,
 # paste your real Google Maps + OpenWeather keys, and run it once.
 scripts/apex/setApiKeys.apex
+
+# Demo PDFs for File Hub / Compliance video — throwaway assets, kept local
+demo-files/

@@ -14,6 +14,7 @@ A multi-feature Salesforce reference implementation for a fictitious shoe-distri
 | 6 | **Reseller Tier Badge** | LWC + uiRecordApi | Roadmap visualisation of Bronze → Silver → Gold → Platinum partner tiers with progress to next tier. |
 | 7 | **Partner Document Center (File Hub)** | LWC + Apex + ContentDocument | Modern document-management surface over Salesforce Files — categorize, send, receive, and link files to Reseller / Loan records. See [FILE-HUB.md](FILE-HUB.md). |
 | 8 | **Opportunity Task Score** | Apex Trigger + AggregateResult | Auto-maintained `Score__c` and `completed_task__c` on Opportunity from related Tasks. |
+| 9 | **Partner Compliance Cockpit + AI Document Classifier** | LWC + Custom Metadata + Einstein + LMS | Network-wide compliance matrix with per-partner scores; an Einstein Prompt Template (GPT-4o mini) classifies each uploaded document into structured JSON, extracts expiry, and auto-closes the matching `Document_Request__c`. File Hub categories feed a live checklist that re-scores via Lightning Message Service. See [FILE-HUB.md](FILE-HUB.md). |
 
 ## Architecture overview
 
@@ -105,6 +106,14 @@ Specific test classes:
 | Document | Topic |
 |----------|-------|
 | [FILE-HUB.md](FILE-HUB.md) | Partner Document Center architecture and post-deploy setup |
+
+## Recent updates
+
+**2026-07-02**
+- **File Hub category taxonomy unified with the AI/compliance categories.** The tile bar, filter dropdown, and `getCategoryCounts`/`buildEmptyCategoryMap` now include **Tax Document**, **Insurance**, and **Bank Details**, so a document the AI classifier files as e.g. *Insurance* lands under its own filter tile instead of being uncounted. Tile grid is now a 5-column, two-row layout (10 tiles).
+- **`essenWeather` LWC** now loads its OpenWeather key from `API_Config__c` via `ApiKeyService` (same pattern as `routeWeather`) — no key in the component bundle.
+- **API-key setup** — `scripts/apex/setApiKeys.example.apex` (committed template) upserts the Google Maps + OpenWeather keys into `API_Config__c`; the real-key copy `scripts/apex/setApiKeys.apex` is **gitignored**, so no secret ever reaches source.
+- **`demo-files/`** (gitignored) — corporate demo PDFs (distribution agreement, tax certificate, insurance, bank details, catalog, compliance declaration) for the File Hub / Partner Compliance demos.
 
 ## License
 

@@ -15,6 +15,9 @@ import createEntry from '@salesforce/apex/FileHubController.createEntry';
 
 const CATEGORY_OPTIONS = [
     { label: 'Contract', value: 'Contract' },
+    { label: 'Tax Document', value: 'Tax Document' },
+    { label: 'Insurance', value: 'Insurance' },
+    { label: 'Bank Details', value: 'Bank Details' },
     { label: 'Catalog', value: 'Catalog' },
     { label: 'Compliance', value: 'Compliance' },
     { label: 'Marketing', value: 'Marketing' },

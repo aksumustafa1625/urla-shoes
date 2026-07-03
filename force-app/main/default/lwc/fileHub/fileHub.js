@@ -33,6 +33,9 @@ import deleteEntry from '@salesforce/apex/FileHubController.deleteEntry';
 const CATEGORIES = [
     { label: 'All Categories', value: 'All' },
     { label: 'Contract', value: 'Contract' },
+    { label: 'Tax Document', value: 'Tax Document' },
+    { label: 'Insurance', value: 'Insurance' },
+    { label: 'Bank Details', value: 'Bank Details' },
     { label: 'Catalog', value: 'Catalog' },
     { label: 'Compliance', value: 'Compliance' },
     { label: 'Marketing', value: 'Marketing' },
@@ -45,13 +48,16 @@ const CATEGORIES = [
 // Color codes are intentionally vibrant — each category gets its own brand identity,
 // which then propagates to the file list row stripes for at-a-glance recognition.
 const CATEGORY_TILES = [
-    { key: 'All',        label: 'All Files',  icon: 'utility:knowledge_base', color: '#0070d2', tint: '#e3f1fc' },
-    { key: 'Contract',   label: 'Contracts',  icon: 'utility:contract',       color: '#9333ea', tint: '#f3e8ff' },
-    { key: 'Catalog',    label: 'Catalogs',   icon: 'utility:open_folder',    color: '#f59e0b', tint: '#fef3c7' },
-    { key: 'Compliance', label: 'Compliance', icon: 'utility:shield',         color: '#10b981', tint: '#d1fae5' },
-    { key: 'Marketing',  label: 'Marketing',  icon: 'utility:announcement',   color: '#ec4899', tint: '#fce7f3' },
-    { key: 'Personal',   label: 'Personal',   icon: 'utility:user',           color: '#06b6d4', tint: '#cffafe' },
-    { key: 'Other',      label: 'Other',      icon: 'utility:file',           color: '#6b7280', tint: '#f3f4f6' }
+    { key: 'All',          label: 'All Files',  icon: 'utility:knowledge_base',  color: '#0070d2', tint: '#e3f1fc' },
+    { key: 'Contract',     label: 'Contracts',  icon: 'utility:contract',        color: '#9333ea', tint: '#f3e8ff' },
+    { key: 'Tax Document', label: 'Tax',        icon: 'utility:currency',        color: '#0d9488', tint: '#ccfbf1' },
+    { key: 'Insurance',    label: 'Insurance',  icon: 'utility:privately_shared',color: '#4f46e5', tint: '#e0e7ff' },
+    { key: 'Bank Details', label: 'Bank',       icon: 'utility:money',           color: '#0369a1', tint: '#e0f2fe' },
+    { key: 'Catalog',      label: 'Catalogs',   icon: 'utility:open_folder',     color: '#f59e0b', tint: '#fef3c7' },
+    { key: 'Compliance',   label: 'Compliance', icon: 'utility:shield',          color: '#10b981', tint: '#d1fae5' },
+    { key: 'Marketing',    label: 'Marketing',  icon: 'utility:announcement',    color: '#ec4899', tint: '#fce7f3' },
+    { key: 'Personal',     label: 'Personal',   icon: 'utility:user',            color: '#06b6d4', tint: '#cffafe' },
+    { key: 'Other',        label: 'Other',      icon: 'utility:file',            color: '#6b7280', tint: '#f3f4f6' }
 ];
 
 // Quick lookup: category key → color. Used to colorize file row stripes.
@@ -88,7 +94,7 @@ export default class FileHub extends NavigationMixin(LightningElement) {
     @track isLoading = false;
 
     // Per-category counts driving the tile bar; refreshed alongside entries.
-    @track categoryCounts = { All: 0, Contract: 0, Catalog: 0, Compliance: 0, Marketing: 0, Personal: 0, Other: 0 };
+    @track categoryCounts = { All: 0, Contract: 0, 'Tax Document': 0, Insurance: 0, 'Bank Details': 0, Catalog: 0, Compliance: 0, Marketing: 0, Personal: 0, Other: 0 };
 
     // Recent Activity panel state — last 10 events involving the current user.
     @track recentActivity = [];

@@ -51,11 +51,12 @@
     margin-left: 4px;
 }
 
-/* CATEGORY TILE BAR — single row of 7, half-width tiles, brand-per-category.
-   Forced 7-column grid keeps the bar to a single line regardless of viewport. */
+/* CATEGORY TILE BAR — 10 tiles (All + 9 categories) laid out as an even
+   5-column grid, so it fills two tidy rows on both the wide home page and the
+   narrow record-page column. Brand-per-category colours carry into row stripes. */
 .fh-tile-bar {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 5px;
     margin-bottom: 10px;
 }

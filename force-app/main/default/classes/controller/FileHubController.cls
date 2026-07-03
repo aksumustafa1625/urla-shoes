@@ -191,6 +191,9 @@ public with sharing class FileHubController {
         return new Map<String, Integer>{
             'All' => 0,
             'Contract' => 0,
+            'Tax Document' => 0,
+            'Insurance' => 0,
+            'Bank Details' => 0,
             'Catalog' => 0,
             'Compliance' => 0,
             'Marketing' => 0,

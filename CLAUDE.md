@@ -2,7 +2,7 @@
 
 **This is the first file Claude reads in a new session.** It captures everything that exists, the most recent active work, what's deployed, and how to pick up where we left off.
 
-Last updated: **2026-05-20** (Notion publisher + Partner Compliance Cockpit 3 phases + File Hub FLS/ghost-record hardening)
+Last updated: **2026-07-02** (File Hub category taxonomy unified with AI/compliance categories · essenWeather→ApiKeyService · gitignored API-key setup script · corporate demo PDFs · portfolio feature-walkthrough deployed to mustafaaksu.dev)
 
 ---
 
@@ -59,9 +59,23 @@ The fictional company is a Germany-based shoe distributor with a reseller/partne
 
 ---
 
-## 5. Most recent active work — Partner Compliance Cockpit (on File Hub)
+## 5. Most recent active work
 
-The **last major thing built** (2026-05-20). Full detail in [FILE-HUB.md](FILE-HUB.md). It extends File Hub into an autonomous, AI-augmented partner compliance platform:
+### Latest session (2026-07-02) — taxonomy unification, key infra, demo assets, portfolio publish
+
+Interview-prep / demo-hardening session (not committed yet unless noted — verify with `git status`):
+
+- **File Hub category taxonomy unified with the AI/compliance categories.** The File Hub tile bar, filter dropdown, and Apex `getCategoryCounts`/`buildEmptyCategoryMap` now include **Tax Document, Insurance, Bank Details** (previously only Contract/Catalog/Compliance/Marketing/Personal/Other). So a document the AI classifier files as e.g. *Insurance* now lands under its own filter tile instead of being uncounted. Tile grid changed 7-col → **5-col** (10 tiles, two even rows). Files: `fileHub.js`, `fileHubSendModal.js`, `FileHubController.buildEmptyCategoryMap`, `fileHub.css`. **Deployed to org; still uncommitted locally.**
+- **`essenWeather` LWC → `ApiKeyService`.** The secondary weather dashboard now loads its OpenWeather key from `API_Config__c` via `ApiKeyService.getOpenWeatherApiKey()` (was a blank client-side field) — identical to `routeWeather`, so no key lives in the LWC bundle. **Committed** (`bfa2b9d`).
+- **API-key setup script.** `scripts/apex/setApiKeys.example.apex` (committed template) upserts the Google Maps + OpenWeather keys into `API_Config__c`; the real-key copy `scripts/apex/setApiKeys.apex` is **gitignored** so no secret reaches source. OpenWeather key is set in the org; Google Maps key was already present (`AIza…`) — its map needs the key project's billing enabled to render.
+- **`demo-files/`** (gitignored) — corporate demo PDFs (distribution agreement, tax certificate, insurance, bank details, catalog, compliance declaration) generated for the File Hub + Partner Compliance demos, branded per reseller (Kano/Abuja Shop).
+- **Portfolio published.** Added a bilingual (EN/DE) **7-feature walkthrough** (description + screenshot each) to the Urla Shoes page on **mustafaaksu.dev** (`~/mustafaaksu-portfolio`, Next.js 16) — new `ProjectFeature` type + `features[]` in `src/lib/projects.ts`, render in the `[slug]` detail page, `projects.walkthrough` dict label, 6 screenshots under `public/projects/urla/`. Committed + pushed to `main` (Vercel auto-deploy).
+
+**Demo honesty framing (for recruiter talks):** partner document upload happens **in-org** (there is no external Experience Cloud portal — that's the production vision); AI classification is triggered per-document via *Analyze with AI* (the live/auto part is the LMS re-score afterwards); Route & Weather map is blocked on Google Maps billing (weather + AI verdict work).
+
+### Prior major build — Partner Compliance Cockpit (on File Hub)
+
+The **last major thing built before this session** (2026-05-20). Full detail in [FILE-HUB.md](FILE-HUB.md). It extends File Hub into an autonomous, AI-augmented partner compliance platform:
 
 - **Phase 1** — `Compliance_Requirement__mdt` (4 admin-managed requirements) + `ComplianceService` (MISSING/EXPIRED/EXPIRING/OK status + score, `WITH USER_MODE`) + `complianceCockpit` (network matrix) & `resellerComplianceChecklist` (score ring) LWCs.
 - **Phase 2** — `DocumentIntelligenceService.classifyAndApply` calls the `DocumentClassification` Einstein Prompt Template (GPT-4o mini, authored as metadata) → classifies + extracts expiry + applies; `@TestVisible mockLlmText` for tests. **Verified live** (real GPT-4o mini call). `documentAiClassifier` LWC.
