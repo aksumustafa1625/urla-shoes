@@ -14,7 +14,7 @@
  * - Only one Queueable is enqueued per trigger invocation (regardless of batch size),
  *   which keeps us well under the 50-jobs-per-transaction governor limit.
  */
-public class ContactTriggerHandler extends TriggerHandler {
+public with sharing class ContactTriggerHandler extends TriggerHandler {
 
     /**
      * Runs after Contacts are inserted. Filters out contacts without a FirstName

@@ -1,4 +1,4 @@
-public class TaskTriggerHandler {
+public with sharing class TaskTriggerHandler {
     public static void updateOpportunityTaskCounts(Set<Id> oppIds) {
         List<Opportunity> oppsToUpdate = new List<Opportunity>();
         

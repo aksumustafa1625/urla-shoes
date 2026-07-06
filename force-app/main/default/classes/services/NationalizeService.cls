@@ -21,7 +21,7 @@
  * - If API returns an error or no match, the target field is left null on purpose
  *   (design decision: we prefer "no data" to "bad data").
  */
-public class NationalizeService implements Queueable, Database.AllowsCallouts {
+public with sharing class NationalizeService implements Queueable, Database.AllowsCallouts {
 
     // Accepting List<Id> instead of List<Contact> keeps the serialised payload small
     // (critical for Queueable, which has a heap limit for serialised state).
