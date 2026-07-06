@@ -10,13 +10,20 @@
                 </div>
                 <div class="cockpit-subtitle">Document compliance across the reseller network</div>
             </div>
-            <lightning-button-icon
-                icon-name="utility:refresh"
-                alternative-text="Refresh"
-                title="Refresh"
-                variant="bare"
-                onclick={handleRefresh}>
-            </lightning-button-icon>
+            <div class="cockpit-refresh" style="position:relative;width:2rem;height:2rem;">
+                <template if:false={isRefreshing}>
+                    <lightning-button-icon
+                        icon-name="utility:refresh"
+                        alternative-text="Refresh"
+                        title="Refresh"
+                        variant="bare"
+                        onclick={handleRefresh}>
+                    </lightning-button-icon>
+                </template>
+                <template if:true={isRefreshing}>
+                    <lightning-spinner size="small" variant="brand" alternative-text="Refreshing"></lightning-spinner>
+                </template>
+            </div>
         </div>
 
         <!-- SUMMARY STAT CARDS -->

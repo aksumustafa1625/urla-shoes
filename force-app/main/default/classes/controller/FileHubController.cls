@@ -24,7 +24,7 @@ public with sharing class FileHubController {
      * @description Returns entries the current user *owns* and that are not sent to anyone
      *              (Recipient__c is null). Used by the "My Files" tab.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<EntryDTO> getMyFiles(String category, String searchTerm) {
         Id me = UserInfo.getUserId();
         String searchPattern = '%' + (searchTerm == null ? '' : String.escapeSingleQuotes(searchTerm)) + '%';
@@ -50,7 +50,7 @@ public with sharing class FileHubController {
      * @description Entries the current user *received* — Recipient__c = me.
      *              Drives the Inbox tab + unread badge.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<EntryDTO> getInbox(String category, String searchTerm) {
         Id me = UserInfo.getUserId();
         String searchPattern = '%' + (searchTerm == null ? '' : String.escapeSingleQuotes(searchTerm)) + '%';
@@ -75,7 +75,7 @@ public with sharing class FileHubController {
     /**
      * @description Entries the current user sent to someone else. Drives the Sent tab.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<EntryDTO> getSent(String category, String searchTerm) {
         Id me = UserInfo.getUserId();
         String searchPattern = '%' + (searchTerm == null ? '' : String.escapeSingleQuotes(searchTerm)) + '%';
@@ -101,7 +101,7 @@ public with sharing class FileHubController {
      * @description Entries linked to a specific record (Reseller__c or Loan__c).
      *              Used by the record-page embed.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<EntryDTO> getFilesForRecord(Id recordId) {
         if (recordId == null) {
             return new List<EntryDTO>();
@@ -131,7 +131,7 @@ public with sharing class FileHubController {
     /**
      * @description Inbox unread count for the badge. Single COUNT() query, cheap to poll.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Integer getUnreadCount() {
         Id me = UserInfo.getUserId();
         return [SELECT COUNT() FROM File_Hub_Entry__c WHERE Recipient__c = :me AND Read__c = false WITH USER_MODE];
@@ -145,7 +145,7 @@ public with sharing class FileHubController {
      * @param viewType One of: 'myFiles' | 'inbox' | 'sent' | 'record'
      * @param recordId Only used when viewType = 'record'
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Map<String, Integer> getCategoryCounts(String viewType, Id recordId) {
         Id me = UserInfo.getUserId();
         String whereClause;
@@ -211,7 +211,7 @@ public with sharing class FileHubController {
      *              The wrapper DTO also carries the month name so the header can read
      *              "MAY ACTIVITY" instead of "30-DAY ACTIVITY" without an extra round trip.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static MonthActivityDTO getMonthActivity() {
         Id me = UserInfo.getUserId();
         Date today = Date.today();
@@ -278,7 +278,7 @@ public with sharing class FileHubController {
      *              (sent or received) within the past 7 days. Drives the Recent Activity
      *              panel at the bottom of the LWC.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<ActivityDTO> getRecentActivity() {
         Id me = UserInfo.getUserId();
         DateTime since = DateTime.now().addDays(-7);

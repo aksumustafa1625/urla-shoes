@@ -7,6 +7,7 @@ export default class ComplianceCockpit extends NavigationMixin(LightningElement)
     matrix;
     wiredMatrix;
     error;
+    isRefreshing = false;
 
     @wire(getMatrix)
     wired(result) {
@@ -107,7 +108,17 @@ export default class ComplianceCockpit extends NavigationMixin(LightningElement)
         });
     }
 
-    handleRefresh() {
-        return refreshApex(this.wiredMatrix);
+    async handleRefresh() {
+        this.isRefreshing = true;
+        try {
+            // refreshApex re-fetches getMatrix from the server (bypassing cache);
+            // the 500ms floor keeps the spinner visible so the refresh is perceptible.
+            await Promise.all([
+                refreshApex(this.wiredMatrix),
+                new Promise((resolve) => setTimeout(resolve, 500))
+            ]);
+        } finally {
+            this.isRefreshing = false;
+        }
     }
 }
