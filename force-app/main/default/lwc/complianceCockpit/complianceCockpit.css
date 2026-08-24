@@ -1,0 +1,233 @@
+.cockpit-wrapper {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #16325c;
+}
+
+/* HEADER */
+.cockpit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eef1f6;
+}
+.cockpit-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cockpit-title-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #16325c;
+}
+.cockpit-subtitle {
+    font-size: 12px;
+    color: #54698d;
+    margin-left: 28px;
+    margin-top: 2px;
+}
+
+/* SUMMARY STATS */
+.cockpit-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.cockpit-stat {
+    background: #f7f9fb;
+    border: 1px solid #eef1f6;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+}
+.cockpit-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #16325c;
+}
+.cockpit-stat-label {
+    font-size: 11px;
+    color: #54698d;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.cockpit-stat-green { background: #effaf0; border-color: #c5e8c8; }
+.cockpit-stat-green .cockpit-stat-value { color: #2e844a; }
+.cockpit-stat-amber { background: #fff5ea; border-color: #ffe0bf; }
+.cockpit-stat-amber .cockpit-stat-value { color: #fe9339; }
+.cockpit-stat-red { background: #feeff0; border-color: #f5c2c7; }
+.cockpit-stat-red .cockpit-stat-value { color: #ea001e; }
+
+/* MATRIX TABLE */
+.cockpit-table-scroll {
+    overflow-x: auto;
+    border: 1px solid #eef1f6;
+    border-radius: 8px;
+}
+.cockpit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.cockpit-table thead th {
+    background: #f7f9fb;
+    color: #54698d;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 10px 8px;
+    border-bottom: 2px solid #eef1f6;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.cockpit-th-reseller {
+    text-align: left;
+    min-width: 180px;
+}
+.cockpit-th-req {
+    text-align: center;
+    min-width: 90px;
+    max-width: 110px;
+}
+.cockpit-th-req span {
+    display: inline-block;
+    line-height: 1.2;
+}
+.cockpit-th-score {
+    text-align: center;
+    min-width: 120px;
+}
+.cockpit-row {
+    transition: background 0.12s;
+}
+.cockpit-row:hover {
+    background: #f9fbfd;
+}
+.cockpit-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f0f3f7;
+    vertical-align: middle;
+}
+.cockpit-td-reseller {
+    text-align: left;
+}
+.cockpit-reseller-name {
+    font-weight: 600;
+    color: #16325c;
+    cursor: pointer;
+}
+.cockpit-reseller-name:hover {
+    color: #0070d2;
+    text-decoration: underline;
+}
+.cockpit-reseller-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 3px;
+}
+.cockpit-reseller-loc {
+    font-size: 11px;
+    color: #80949c;
+}
+
+/* TIER CHIP */
+.cockpit-tier {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background: #e5e5e5;
+    color: #514f4d;
+}
+.cockpit-tier-bronze   { background: #f0e0d0; color: #7a4f1d; }
+.cockpit-tier-silver   { background: #e6e8ea; color: #5c6670; }
+.cockpit-tier-gold     { background: #fcefc4; color: #8a6d00; }
+.cockpit-tier-platinum { background: #dbeafe; color: #0b5cab; }
+
+/* STATUS CELL */
+.cockpit-td-cell {
+    text-align: center;
+}
+.cockpit-cell {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.cockpit-cell:hover {
+    transform: scale(1.18);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* SCORE BAR */
+.cockpit-td-score {
+    text-align: center;
+}
+.cockpit-score-text {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+.cockpit-score-track {
+    background: #eef1f6;
+    border-radius: 6px;
+    height: 8px;
+    width: 100%;
+    overflow: hidden;
+}
+.cockpit-score-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+/* LEGEND */
+.cockpit-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #eef1f6;
+}
+.cockpit-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #54698d;
+}
+.cockpit-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* EMPTY */
+.cockpit-empty {
+    text-align: center;
+    padding: 40px 16px;
+    color: #80949c;
+}
+.cockpit-empty p {
+    margin-top: 12px;
+    font-size: 13px;
+}

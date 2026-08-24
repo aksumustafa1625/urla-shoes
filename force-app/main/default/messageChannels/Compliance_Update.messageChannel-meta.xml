@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Compliance Update</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Broadcast when a reseller's document compliance changes (e.g. after AI classification) so listening components can refresh their score.</description>
+    <lightningMessageFields>
+        <fieldName>resellerId</fieldName>
+        <description>Id of the reseller whose compliance changed.</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

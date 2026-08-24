@@ -19,7 +19,7 @@
  * Author: Mustafa Bey
  * Since: 2026
  */
-global class LeadQueueScheduler implements Schedulable {
+global with sharing class LeadQueueScheduler implements Schedulable {
     
     global void execute(SchedulableContext sc) {
         

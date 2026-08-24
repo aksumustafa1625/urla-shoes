@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Defines the documents a Reseller must have on file (per-category). Drives the Partner Compliance Cockpit and per-Reseller checklist. Admin-managed without deploy.</description>
+    <label>Compliance Requirement</label>
+    <pluralLabel>Compliance Requirements</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

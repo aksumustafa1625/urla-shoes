@@ -1,5 +1,6 @@
 import { LightningElement, track } from 'lwc';
- 
+import getOpenWeatherApiKey from '@salesforce/apex/ApiKeyService.getOpenWeatherApiKey';
+
 export default class EssenWeather extends LightningElement {
  
     @track weatherData;
@@ -14,13 +15,19 @@ export default class EssenWeather extends LightningElement {
     // Default city — Essen
     _city = 'Essen,DE';
  
-    apiKey = 'REDACTED_OPENWEATHER_KEY';
+    // SECURITY: never hardcode the key. Load it from the API_Config__c Custom
+    // Setting via ApiKeyService (same pattern as the routeWeather component).
+    apiKey = '';
     _timer;
  
     // ── Lifecycle ──────────────────────────────────────────────
-    connectedCallback() {
+    async connectedCallback() {
         this.updateTime();
         this._timer = setInterval(() => this.updateTime(), 60000);
+        // Load the OpenWeather key from the API_Config__c Custom Setting via
+        // ApiKeyService — identical to the routeWeather component. No key ever
+        // lives in source control.
+        this.apiKey = await getOpenWeatherApiKey();
         this.fetchWeather();
     }
  

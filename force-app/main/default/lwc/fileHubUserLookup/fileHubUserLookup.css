@@ -1,0 +1,82 @@
+.fhul-wrapper {
+    position: relative;
+}
+
+.fhul-selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f4f9ff;
+    border: 1px solid #1589ee;
+    border-radius: 4px;
+    padding: 6px 8px;
+}
+.fhul-selected-name {
+    flex: 1;
+    font-size: 13px;
+    color: #16325c;
+    font-weight: 500;
+}
+
+.fhul-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+    max-height: 240px;
+    overflow-y: auto;
+    margin-top: 4px;
+}
+
+.fhul-dropdown-loading,
+.fhul-dropdown-empty {
+    padding: 12px;
+    text-align: center;
+    color: #54698d;
+    font-size: 13px;
+}
+
+.fhul-result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.fhul-result:hover {
+    background: #f4f9ff;
+}
+
+.fhul-result-photo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.fhul-result-text {
+    flex: 1;
+    min-width: 0;
+}
+.fhul-result-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #16325c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fhul-result-email {
+    font-size: 11px;
+    color: #80949c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

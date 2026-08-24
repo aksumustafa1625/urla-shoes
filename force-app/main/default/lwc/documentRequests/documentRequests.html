@@ -1,0 +1,52 @@
+<template>
+    <lightning-card>
+        <div class="req-wrapper">
+            <div class="req-header">
+                <div class="req-title">
+                    <lightning-icon icon-name="utility:send" size="x-small" variant="success"></lightning-icon>
+                    <span>Document Requests</span>
+                    <template if:true={openCount}>
+                        <span class="req-open-pill">{openCount} open</span>
+                    </template>
+                </div>
+                <div class="req-actions">
+                    <template if:true={loading}>
+                        <lightning-spinner alternative-text="Working" size="small"></lightning-spinner>
+                    </template>
+                    <template if:false={loading}>
+                        <lightning-button
+                            label="Request Missing Documents"
+                            icon-name="utility:adduser"
+                            variant="brand"
+                            onclick={handleRequestAll}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+
+            <template if:true={hasRequests}>
+                <div class="req-list">
+                    <template for:each={decorated} for:item="r">
+                        <div key={r.id} class="req-row">
+                            <div class="req-row-body">
+                                <div class="req-row-label">{r.label}</div>
+                                <div class="req-row-meta">
+                                    <span class="req-reason">{r.reason}</span>
+                                    <span class="req-date">· {r.dateLabel}</span>
+                                </div>
+                            </div>
+                            <span class={r.badgeClass}>{r.status}</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasRequests}>
+                <div class="req-empty">
+                    <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                    <p>No open requests. Click "Request Missing Documents" to scan compliance gaps.</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

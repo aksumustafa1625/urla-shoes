@@ -15,7 +15,7 @@
  *   parseCountry tests to catch regressions.
  */
 @IsTest
-public class NationalizeCalloutMock implements HttpCalloutMock {
+public with sharing class NationalizeCalloutMock implements HttpCalloutMock {
 
     // Holds the scenario string so `respond()` can branch on it.
     private String scenario;

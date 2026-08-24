@@ -1,0 +1,64 @@
+<template>
+    <div class="fhul-wrapper">
+
+        <!-- Selected user pill -->
+        <template if:true={hasSelection}>
+            <div class="fhul-selected">
+                <lightning-icon icon-name="standard:user" size="x-small" alternative-text="User"></lightning-icon>
+                <span class="fhul-selected-name">{selectedName}</span>
+                <lightning-button-icon
+                    icon-name="utility:close"
+                    alternative-text="Clear"
+                    title="Clear"
+                    variant="bare"
+                    size="x-small"
+                    onclick={handleClear}>
+                </lightning-button-icon>
+            </div>
+        </template>
+
+        <!-- Search input -->
+        <template if:false={hasSelection}>
+            <lightning-input
+                type="search"
+                variant="label-hidden"
+                label="Search users"
+                placeholder={inputPlaceholder}
+                value={searchTerm}
+                onchange={handleInput}
+                onfocus={handleFocus}
+                onblur={handleBlur}>
+            </lightning-input>
+        </template>
+
+        <!-- Results dropdown -->
+        <template if:true={showDropdown}>
+            <div class="fhul-dropdown">
+                <template if:true={isSearching}>
+                    <div class="fhul-dropdown-loading">Searching...</div>
+                </template>
+                <template if:true={hasResults}>
+                    <template for:each={results} for:item="user">
+                        <div
+                            key={user.userId}
+                            class="fhul-result"
+                            data-userid={user.userId}
+                            onmousedown={handleSelect}>
+                            <img src={user.photoUrl} alt="" class="fhul-result-photo" />
+                            <div class="fhul-result-text">
+                                <div class="fhul-result-name">{user.name}</div>
+                                <div class="fhul-result-email">{user.email}</div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={hasResults}>
+                    <template if:false={isSearching}>
+                        <div class="fhul-dropdown-empty">No users found.</div>
+                    </template>
+                </template>
+            </div>
+        </template>
+
+    </div>
+</template>

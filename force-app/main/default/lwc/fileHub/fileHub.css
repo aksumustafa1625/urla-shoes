@@ -1,0 +1,409 @@
+/* ── FileHub — modern card layout for the File Hub LWC ─────────── */
+
+.fh-wrapper {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #16325c;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.fh-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eef1f6;
+}
+.fh-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.fh-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* Title book icon is tinted via lightning-icon variant="success" in the template —
+   no CSS override needed. The variant is the SLDS-blessed way to color utility icons. */
+.fh-title-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #16325c;
+}
+.fh-summary {
+    font-size: 12px;
+    color: #54698d;
+    margin-left: 28px;
+}
+.fh-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.fh-send-btn {
+    margin-left: 4px;
+}
+
+/* CATEGORY TILE BAR — 10 tiles (All + 9 categories) laid out as an even
+   5-column grid, so it fills two tidy rows on both the wide home page and the
+   narrow record-page column. Brand-per-category colours carry into row stripes. */
+.fh-tile-bar {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 5px;
+    margin-bottom: 10px;
+}
+.fh-tile {
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 5px 7px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-height: 44px;
+    justify-content: center;
+    /* Background, border, color set inline per-tile from the brand palette */
+}
+.fh-tile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.fh-tile-active {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.fh-tile-active:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
+}
+.fh-tile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1;
+}
+.fh-tile-count {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: inherit;
+}
+.fh-tile-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: inherit;
+    opacity: 0.9;
+    letter-spacing: 0.1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 1px;
+}
+
+/* 30-DAY ACTIVITY HEATMAP */
+.fh-heatmap {
+    background: #ffffff;
+    border: 1px solid #eef1f6;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+}
+.fh-heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.fh-heatmap-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #80949c;
+}
+.fh-heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.fh-heatmap-legend-text {
+    font-size: 10px;
+    color: #80949c;
+}
+.fh-heatmap-legend-sq {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+}
+.fh-heatmap-grid {
+    /* grid-template-columns set inline from the LWC (varies by month length) */
+    display: grid;
+    gap: 3px;
+}
+.fh-heatmap-sq {
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    transition: transform 0.1s;
+    cursor: default;
+    border: 1px solid transparent;  /* placeholder so today's outline doesn't shift layout */
+}
+.fh-heatmap-sq:hover {
+    transform: scale(1.4);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+/* Today's cell — outlined ring so it stands out from neighbouring cells regardless
+   of activity level. Border instead of outline so it doesn't add extra spacing. */
+.fh-heatmap-sq-today {
+    border: 1.5px solid #16325c;
+    box-shadow: 0 0 0 2px rgba(22, 50, 92, 0.15);
+}
+/* Future cells — slightly dimmed and non-interactive feeling */
+.fh-heatmap-sq-future {
+    opacity: 0.7;
+}
+.fh-heatmap-sq-future:hover {
+    transform: none;  /* future cells don't pop on hover — they're placeholders */
+    box-shadow: none;
+}
+
+/* TABS */
+.fh-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eef1f6;
+}
+.fh-tab {
+    padding: 8px 14px;
+    cursor: pointer;
+    color: #54698d;
+    font-size: 13px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+}
+.fh-tab:hover {
+    color: #0070d2;
+}
+.fh-tab-active {
+    color: #0070d2;
+    border-bottom-color: #0070d2;
+}
+
+/* FILTERS */
+.fh-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.fh-search {
+    flex: 2;
+}
+.fh-category {
+    flex: 1;
+    min-width: 160px;
+}
+
+/* UPLOAD */
+.fh-upload {
+    background: #f7f9fb;
+    border: 2px dashed #d8dde6;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+.fh-upload-hint {
+    font-size: 12px;
+    color: #54698d;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+/* LOADING */
+.fh-loading {
+    padding: 32px;
+    text-align: center;
+    position: relative;
+    min-height: 80px;
+}
+
+/* LIST */
+.fh-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+/* ROW — category-coded left stripe (border-left-color set inline per row) */
+.fh-row {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #eef1f6;
+    border-left: 4px solid #6b7280;  /* default, overridden inline by category color */
+    transition: box-shadow 0.15s, transform 0.1s;
+}
+.fh-row:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.fh-row-unread {
+    background: #f4f9ff;
+    border-color: #cfe2f3;
+    /* The left stripe color is still set by the category — unread state adds
+       the soft blue background tint without overriding the category stripe. */
+}
+.fh-row-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 2px;
+}
+.fh-row-body {
+    flex: 1;
+    min-width: 0;
+}
+.fh-row-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #16325c;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fh-row-title:hover {
+    color: #0070d2;
+    text-decoration: underline;
+}
+.fh-row-meta {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #54698d;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.fh-tag {
+    /* background + color set inline per-row from the category palette so the chip
+       matches the left stripe and the tile color. Stays consistent across the UI. */
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.fh-row-from {
+    color: #54698d;
+}
+.fh-row-date {
+    color: #80949c;
+}
+.fh-row-related {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #0070d2;
+    font-weight: 500;
+}
+.fh-row-message {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #54698d;
+    font-style: italic;
+    background: #f7f9fb;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border-left: 2px solid #d8dde6;
+}
+.fh-row-actions {
+    display: flex;
+    gap: 2px;
+    align-items: flex-start;
+}
+
+/* EMPTY */
+.fh-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 16px;
+    color: #80949c;
+    text-align: center;
+}
+.fh-empty p {
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+/* RECENT ACTIVITY PANEL */
+.fh-activity {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #eef1f6;
+}
+.fh-activity-header {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #80949c;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.fh-activity-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 6px 4px;
+    border-radius: 4px;
+    transition: background 0.1s;
+}
+.fh-activity-row:hover {
+    background: #f7f9fb;
+}
+.fh-activity-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.fh-activity-body {
+    flex: 1;
+    min-width: 0;
+}
+.fh-activity-line {
+    font-size: 12px;
+    color: #16325c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.fh-activity-action {
+    font-weight: 600;
+}
+.fh-activity-file {
+    color: #54698d;
+}
+.fh-activity-context {
+    font-size: 11px;
+    color: #0070d2;
+    margin-top: 1px;
+}
+.fh-activity-time {
+    font-size: 11px;
+    color: #80949c;
+    white-space: nowrap;
+    flex-shrink: 0;
+}

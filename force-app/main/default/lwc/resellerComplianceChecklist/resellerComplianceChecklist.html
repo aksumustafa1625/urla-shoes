@@ -1,0 +1,58 @@
+<template>
+    <lightning-card>
+        <div class="checklist-wrapper">
+
+            <!-- HEADER with score ring -->
+            <div class="checklist-header">
+                <div class="checklist-ring" style={ringStyle}>
+                    <div class="checklist-ring-inner">
+                        <span class="checklist-ring-score" style={scoreTextStyle}>{score}%</span>
+                    </div>
+                </div>
+                <div class="checklist-header-text">
+                    <div class="checklist-title">
+                        <lightning-icon icon-name="utility:shield" size="x-small" variant="success"></lightning-icon>
+                        <span>Document Compliance</span>
+                    </div>
+                    <div class="checklist-summary">{summaryLine}</div>
+                </div>
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    alternative-text="Refresh"
+                    title="Refresh"
+                    variant="bare"
+                    onclick={handleRefresh}
+                    class="checklist-refresh">
+                </lightning-button-icon>
+            </div>
+
+            <!-- CHECKLIST -->
+            <template if:true={hasData}>
+                <div class="checklist-list">
+                    <template for:each={decoratedCells} for:item="cell">
+                        <div key={cell.key} class={cell.rowClass}>
+                            <div class="checklist-icon" style={cell.iconStyle}>
+                                <lightning-icon icon-name={cell.icon} size="xx-small" variant="inverse"></lightning-icon>
+                            </div>
+                            <div class="checklist-body">
+                                <div class="checklist-label">{cell.label}</div>
+                                <div class="checklist-status">{cell.statusText}</div>
+                            </div>
+                            <template if:true={cell.hasFile}>
+                                <lightning-button-icon
+                                    icon-name="utility:preview"
+                                    alternative-text="Preview"
+                                    title="Preview document"
+                                    variant="bare"
+                                    data-docid={cell.contentDocumentId}
+                                    onclick={handlePreview}>
+                                </lightning-button-icon>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

@@ -6,7 +6,7 @@
  * @group       : Loan Creation
  */
 @IsTest
-public class LoanSyncCalloutMock implements HttpCalloutMock {
+public with sharing class LoanSyncCalloutMock implements HttpCalloutMock {
 
     private String scenario;
     private String lastRequestBody;

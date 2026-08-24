@@ -1,4 +1,4 @@
-public class EmailUtils {
+public with sharing class EmailUtils {
     
     /**
      * @description

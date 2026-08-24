@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>false</isExposed>
+    <masterLabel>File Hub Record Lookup</masterLabel>
+    <description>Reusable record search/select for Reseller__c or Loan__c lookups in the File Hub send modal.</description>
+</LightningComponentBundle>

@@ -1,0 +1,96 @@
+.req-wrapper {
+    padding: 8px 12px 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #16325c;
+}
+.req-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.req-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 600;
+}
+.req-open-pill {
+    background: #fff5ea;
+    color: #fe9339;
+    border: 1px solid #ffe0bf;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+}
+.req-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.req-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid #eef1f6;
+    border-radius: 6px;
+    background: #ffffff;
+}
+.req-row-body {
+    min-width: 0;
+}
+.req-row-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #16325c;
+}
+.req-row-meta {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #54698d;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.req-date {
+    color: #80949c;
+}
+
+/* STATUS BADGES */
+.req-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.req-badge-open {
+    background: #fff5ea;
+    color: #c4691a;
+}
+.req-badge-ok {
+    background: #effaf0;
+    color: #2e844a;
+}
+.req-badge-cancel {
+    background: #f0f0f0;
+    color: #706e6b;
+}
+
+.req-empty {
+    text-align: center;
+    padding: 24px 16px;
+    color: #80949c;
+}
+.req-empty p {
+    margin-top: 8px;
+    font-size: 13px;
+}

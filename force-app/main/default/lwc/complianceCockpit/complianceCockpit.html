@@ -1,0 +1,123 @@
+<template>
+    <div class="cockpit-wrapper">
+
+        <!-- HEADER -->
+        <div class="cockpit-header">
+            <div class="cockpit-title-block">
+                <div class="cockpit-title">
+                    <lightning-icon icon-name="utility:shield" size="small" variant="success" alternative-text="Compliance"></lightning-icon>
+                    <span class="cockpit-title-text">Partner Compliance Cockpit</span>
+                </div>
+                <div class="cockpit-subtitle">Document compliance across the reseller network</div>
+            </div>
+            <div class="cockpit-refresh" style="position:relative;width:2rem;height:2rem;">
+                <template if:false={isRefreshing}>
+                    <lightning-button-icon
+                        icon-name="utility:refresh"
+                        alternative-text="Refresh"
+                        title="Refresh"
+                        variant="bare"
+                        onclick={handleRefresh}>
+                    </lightning-button-icon>
+                </template>
+                <template if:true={isRefreshing}>
+                    <lightning-spinner size="small" variant="brand" alternative-text="Refreshing"></lightning-spinner>
+                </template>
+            </div>
+        </div>
+
+        <!-- SUMMARY STAT CARDS -->
+        <template if:true={hasData}>
+            <div class="cockpit-stats">
+                <div class="cockpit-stat">
+                    <div class="cockpit-stat-value">{matrix.totalResellers}</div>
+                    <div class="cockpit-stat-label">Resellers</div>
+                </div>
+                <div class="cockpit-stat">
+                    <div class="cockpit-stat-value" style={avgScoreStyle}>{matrix.avgScore}%</div>
+                    <div class="cockpit-stat-label">Avg Compliance</div>
+                </div>
+                <div class="cockpit-stat cockpit-stat-green">
+                    <div class="cockpit-stat-value">{matrix.fullyCompliantCount}</div>
+                    <div class="cockpit-stat-label">Fully Compliant</div>
+                </div>
+                <div class="cockpit-stat cockpit-stat-amber">
+                    <div class="cockpit-stat-value">{matrix.expiringSoonCount}</div>
+                    <div class="cockpit-stat-label">Expiring Soon</div>
+                </div>
+                <div class="cockpit-stat cockpit-stat-red">
+                    <div class="cockpit-stat-value">{matrix.atRiskCount}</div>
+                    <div class="cockpit-stat-label">At Risk</div>
+                </div>
+            </div>
+        </template>
+
+        <!-- MATRIX -->
+        <template if:true={hasData}>
+            <div class="cockpit-table-scroll">
+                <table class="cockpit-table">
+                    <thead>
+                        <tr>
+                            <th class="cockpit-th-reseller">Reseller</th>
+                            <template for:each={requirements} for:item="req">
+                                <th key={req.developerName} class="cockpit-th-req" title={req.label}>
+                                    <span>{req.label}</span>
+                                </th>
+                            </template>
+                            <th class="cockpit-th-score">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={decoratedRows} for:item="row">
+                            <tr key={row.resellerId} class="cockpit-row">
+                                <td class="cockpit-td-reseller">
+                                    <div class="cockpit-reseller-name" data-id={row.resellerId} onclick={handleResellerClick}>
+                                        {row.resellerName}
+                                    </div>
+                                    <div class="cockpit-reseller-meta">
+                                        <span class={row.tierClass}>{row.tier}</span>
+                                        <span class="cockpit-reseller-loc">{row.location}</span>
+                                    </div>
+                                </td>
+                                <template for:each={row.cells} for:item="cell">
+                                    <td key={cell.key} class="cockpit-td-cell">
+                                        <div class="cockpit-cell"
+                                             style={cell.style}
+                                             title={cell.tooltip}
+                                             data-docid={cell.contentDocumentId}
+                                             onclick={handleCellClick}>
+                                            <lightning-icon icon-name={cell.icon} size="xx-small" variant="inverse"></lightning-icon>
+                                        </div>
+                                    </td>
+                                </template>
+                                <td class="cockpit-td-score">
+                                    <div class="cockpit-score-text" style={row.scoreTextStyle}>{row.score}%</div>
+                                    <div class="cockpit-score-track">
+                                        <div class="cockpit-score-fill" style={row.scoreBarStyle}></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- LEGEND -->
+            <div class="cockpit-legend">
+                <span class="cockpit-legend-item"><span class="cockpit-legend-dot" style="background:#2e844a;"></span>On file / valid</span>
+                <span class="cockpit-legend-item"><span class="cockpit-legend-dot" style="background:#fe9339;"></span>Expiring soon</span>
+                <span class="cockpit-legend-item"><span class="cockpit-legend-dot" style="background:#ea001e;"></span>Expired</span>
+                <span class="cockpit-legend-item"><span class="cockpit-legend-dot" style="background:#c9c7c5;"></span>Missing</span>
+            </div>
+        </template>
+
+        <!-- EMPTY -->
+        <template if:false={hasData}>
+            <div class="cockpit-empty">
+                <lightning-icon icon-name="utility:shield" size="medium" alternative-text="No data"></lightning-icon>
+                <p>No reseller compliance data yet. Add resellers and link documents in File Hub.</p>
+            </div>
+        </template>
+
+    </div>
+</template>
