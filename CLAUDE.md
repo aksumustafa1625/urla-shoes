@@ -271,7 +271,7 @@ Developer Edition org: **20 MB total file storage**, ~893 KB used at last check,
 
 ---
 
-## 8. Open items / V2 candidates
+## 7. Open items / V2 candidates
 
 ### File Hub V2 features (deferred from MVP)
 - **Required Document Checklist** per Reseller (per cluster-4 conversation) — would make the feature interview-killer-level. "Each reseller must have: Signed Contract, Tax Document, Compliance Form. Show status: uploaded / missing / expired."
@@ -295,7 +295,7 @@ Developer Edition org: **20 MB total file storage**, ~893 KB used at last check,
 
 ---
 
-## 9. How to work with this project
+## 8. How to work with this project
 
 ### Deploy
 ```powershell
@@ -336,7 +336,7 @@ sf org assign permset --name File_Hub_User --target-org "Urla Shoes"
 
 ---
 
-## 11. What "we" most recently completed (May 2026 session highlights)
+## 9. What "we" most recently completed (May 2026 session highlights)
 
 Session opened with full feature suite (features 1-7) already built. Session work in order:
 
@@ -359,7 +359,7 @@ Then asked for this CLAUDE.md file to capture everything.
 
 ---
 
-## 12. Where to start next session
+## 10. Where to start next session
 
 **If the user opens the project and says nothing specific:**
 1. Read this file (you're doing it now).
@@ -375,7 +375,7 @@ Then asked for this CLAUDE.md file to capture everything.
 
 ---
 
-## 13. Important commits worth remembering
+## 11. Important commits worth remembering
 
 (git log review next session can refresh, but key milestones:)
 - Initial project import (features 1-7 already built)

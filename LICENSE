@@ -1,0 +1,27 @@
+Copyright © 2026 Mustafa Aksu. All rights reserved.
+
+This repository ("Urla Shoes") is a personal portfolio and demonstration
+project. It is shared publicly for evaluation, review, and
+reference purposes only.
+
+You MAY:
+  - View and read the source code and documentation.
+  - Reference the architecture and techniques for learning, with attribution.
+
+You MAY NOT, without the prior written permission of the copyright holder:
+  - Use this code, in whole or in part, in any commercial or production system.
+  - Redistribute, sublicense, or sell this code or substantial portions of it.
+  - Present this work, or a derivative of it, as your own.
+
+The project models a fictional company ("Urla Shoes"). All Contact, Opportunity,
+Loan, Lead and Reseller records referenced in scripts and tests are fabricated;
+no real customer or partner data is contained in this repository. External
+services (Nationalize.io, Google Maps, OpenWeather, Notion) are called with keys
+supplied per org and never committed.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+For any use beyond the above, contact: https://mustafaaksu.dev

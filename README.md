@@ -101,6 +101,17 @@ Specific test classes:
 - `FileHubControllerTest` — 12 scenarios covering send / receive / share / delete
 - `TriggerHandler_Test` — base class smoke tests
 
+## Decisions
+
+Fourteen architecture decision records live in [`docs/adr/`](docs/adr/). Each one
+states the constraint that ruled out the obvious answer — Lightning Web Security
+blocking the Maps SDK inside an LWC, `with sharing` not enforcing field access,
+streaming silence being indistinguishable from no news — then what was chosen and
+what it costs.
+
+Start with [the index](docs/adr/README.md); it flags the two pairs worth reading
+against each other.
+
 ## Deep dives
 
 | Document | Topic |
