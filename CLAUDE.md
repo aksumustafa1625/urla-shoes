@@ -271,7 +271,6 @@ Developer Edition org: **20 MB total file storage**, ~893 KB used at last check,
 
 ---
 
-
 ## 8. Open items / V2 candidates
 
 ### File Hub V2 features (deferred from MVP)
@@ -337,7 +336,6 @@ sf org assign permset --name File_Hub_User --target-org "Urla Shoes"
 
 ---
 
-
 ## 11. What "we" most recently completed (May 2026 session highlights)
 
 Session opened with full feature suite (features 1-7) already built. Session work in order:
@@ -368,8 +366,6 @@ Then asked for this CLAUDE.md file to capture everything.
 2. Check git status to see if anything is uncommitted from last session.
 3. Greet the user briefly, reference where we left off (File Hub v5 month heatmap is complete).
 4. Wait for direction.
-
-
 
 **If the user mentions "File Hub" + V2:** open candidates list in section 8 above. Required Document Checklist is the strongest interview-leveraging addition.
 
