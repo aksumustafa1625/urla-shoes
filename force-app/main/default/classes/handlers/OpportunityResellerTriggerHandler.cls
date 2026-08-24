@@ -149,6 +149,9 @@ public with sharing class OpportunityResellerTriggerHandler extends TriggerHandl
             
                 if (shouldSend) {
                 
+                        // Demo placeholder: the registration mail goes to a fixed
+                        // address rather than the partner's own. Replace with the
+                        // resolved partner contact before any real deployment.
                         String email = 'partner-registration@example.com';
                 
                         PartnerRegistrationEmailService.sendRegistrationEmail(email);
