@@ -2,6 +2,14 @@
 
 A multi-feature Salesforce reference implementation for a fictitious shoe-distribution company. Designed to demonstrate production-shaped patterns across LWC, Apex, async integration, real-time dashboards, Einstein AI, and document management.
 
+> **How this was built.**
+>
+> I used Claude to build this repository, the way an engineer today uses an IDE — I would rather say it first than have it asked. The model wrote code; I set the structure, and every decision went through me.
+>
+> So the question worth asking is not *whether* AI wrote it, but **who decided and who verified.** That record is in [`docs/adr/`](docs/adr/): **14 architecture decision records**, each naming the constraint, the choice, the alternatives rejected, and what rejecting them cost. A model does not turn down three options and price the fourth.
+>
+> **What this is not:** a demonstration, not a production system with real users. Built alone, so no colleague reviewed it. Every number is mine — please run them yourself.
+
 ## Features
 
 | # | Feature | Stack | Description |
